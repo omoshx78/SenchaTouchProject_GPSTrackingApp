@@ -298,7 +298,10 @@ function SingleTrackingMap_Menu() {
                   width: 65,
                   margin: '-61 63 0 0',
                   //  html: '<div ><img src="resources/icons/OverViewMapRound.png" width="55" height="55" alt="Company Name"></div>',
-                  html: '<div ><img src="resources/icons/GPSListRound.png" width="55" height="55" alt="Company Name"></div>',
+                //  html: '<div ><img src="resources/icons/GPSListRound.png" width="55" height="55" alt="Company Name"></div>',
+
+                  html: '<div ><img src="resources/icons/BackStreetViewRound.png" width="55" height="55" alt="Company Name"></div>',
+                  
                   ui: 'plain',
                   handler: function (btn) {
                       SingleTrackingMap_MenuHide();
