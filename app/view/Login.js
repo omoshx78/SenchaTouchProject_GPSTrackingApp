@@ -189,7 +189,8 @@ Ext.define('MyGPS.view.Login', {
                          //////////////////////////////////////////////////////////////});
                          //////////////////////////////////////////////////////////////task.delay(1000);
                      
-                     
+                         Ext.Viewport.mask({ xtype: 'loadmask', message: 'Login....' });
+                         var task = Ext.create('Ext.util.DelayedTask', function () {
                          _DataStore_User_Login.getProxy().setExtraParams({
                              US: Ext.getCmp('loginuserNameTextField').getValue(),
                              PW: Ext.getCmp('loginpasswordTextField').getValue(),
@@ -204,8 +205,7 @@ Ext.define('MyGPS.view.Login', {
                          _DataStore_User_Login.load({
                          
                          callback: function (record, operation, success) {
-                             Ext.Viewport.mask({ xtype: 'loadmask', message: 'Login....' });
-                             var task = Ext.create('Ext.util.DelayedTask', function () {
+                          
 
                              if (success) {
                                  var store = _DataStore_User_Login.getAt(0);
@@ -226,13 +226,13 @@ Ext.define('MyGPS.view.Login', {
                              }
 
 
-                               Ext.Viewport.setMasked(false);                  
-                                 });
-                             task.delay(500);
+                              
                          }
                      })
 
-
+                         Ext.Viewport.setMasked(false);                  
+                     });
+                    task.delay(1000);
 
                          // loadTrackID();
                        //  var OperatingSystem = detectos();
