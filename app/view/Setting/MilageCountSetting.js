@@ -1102,6 +1102,19 @@ function MilageCountInfoLoadByAccountNoDeviceID(AccountNo, DeviceID)
 
 function MilageCountInfoLoadByAccountNoDeviceID_CallFromPointInfo(AccountNo, DeviceID) {
 
+
+
+
+    Ext.Viewport.mask({ xtype: 'loadmask', message: 'Loading data..Please Wait.' });
+    var task = Ext.create('Ext.util.DelayedTask', function () {
+
+ 
+
+
+
+
+
+
     _DataStore_MilageCountInfoStore_LoadByDeviceIDAccountNo.removeAll();
     _DataStore_MilageCountInfoStore_LoadByDeviceIDAccountNo.getProxy().setExtraParams({
 
@@ -1140,6 +1153,9 @@ function MilageCountInfoLoadByAccountNoDeviceID_CallFromPointInfo(AccountNo, Dev
         }
 
     });
-    //return count;
+    Ext.Viewport.setMasked(false);
+    });
+    task.delay(1000);
+
 
 }

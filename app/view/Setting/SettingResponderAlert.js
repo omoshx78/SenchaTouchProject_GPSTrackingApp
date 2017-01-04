@@ -2,7 +2,7 @@
    
 });
 
-
+var _isRealtioshipOter;
 var _settingResponderAlertDetailsEditor;
 function SettingResponderAlertDetails() {
 
@@ -149,7 +149,7 @@ function SettingResponderAlertDetails() {
                                                              Ext.getCmp('SettingResponderAlertRelationShipOthers').setChecked(false);
                                                              Ext.getCmp('SettingResponderAlertRelationShipTxtOther').setDisabled(true);
                                                              Ext.getCmp('SettingResponderAlertRelationShip').setValue('FATHER');
-                                                             
+                                                             _isRealtioshipOter = 'no';
                                                        },
                                                        uncheck: function () {
 
@@ -175,6 +175,7 @@ function SettingResponderAlertDetails() {
                                                     Ext.getCmp('SettingResponderAlertRelationShipOthers').setChecked(false);
                                                     Ext.getCmp('SettingResponderAlertRelationShipTxtOther').setDisabled(true);
                                                     Ext.getCmp('SettingResponderAlertRelationShip').setValue('MOTHER');
+                                                    _isRealtioshipOter = 'no';
                                                 },
                                                 uncheck: function () {
 
@@ -200,6 +201,7 @@ function SettingResponderAlertDetails() {
                                                        Ext.getCmp('SettingResponderAlertRelationShipOthers').setChecked(false);
                                                        Ext.getCmp('SettingResponderAlertRelationShipTxtOther').setDisabled(true);
                                                        Ext.getCmp('SettingResponderAlertRelationShip').setValue('BROTHER');
+                                                       _isRealtioshipOter = 'no';
                                                    },
                                                    uncheck: function () {
 
@@ -225,6 +227,7 @@ function SettingResponderAlertDetails() {
                                                         Ext.getCmp('SettingResponderAlertRelationShipOthers').setChecked(false);
                                                         Ext.getCmp('SettingResponderAlertRelationShipTxtOther').setDisabled(true);
                                                         Ext.getCmp('SettingResponderAlertRelationShip').setValue('SISTER');
+                                                        _isRealtioshipOter = 'no';
                                                     },
                                                     uncheck: function () {
 
@@ -249,6 +252,7 @@ function SettingResponderAlertDetails() {
                                                            Ext.getCmp('SettingResponderAlertRelationShipOthers').setChecked(false);
                                                            Ext.getCmp('SettingResponderAlertRelationShipTxtOther').setDisabled(true);
                                                            Ext.getCmp('SettingResponderAlertRelationShip').setValue('STAFF');
+                                                           _isRealtioshipOter = 'no';
                                                        },
                                                        uncheck: function () {
 
@@ -272,6 +276,7 @@ function SettingResponderAlertDetails() {
                                                               Ext.getCmp('SettingResponderAlertRelationShipSister').setChecked(false);
                                                               Ext.getCmp('SettingResponderAlertRelationShipStaff').setChecked(false);
                                                               Ext.getCmp('SettingResponderAlertRelationShipTxtOther').setDisabled(false);
+                                                              _isRealtioshipOter = 'yes';
 
                                                          },
                                                           uncheck: function () {
@@ -361,7 +366,7 @@ function SettingResponderAlertDetails() {
                                         check: function () {
 
                                             Ext.getCmp('SettingResponderAlertRelationShipAlertStatusInActive').setChecked(false);
-                                            Ext.getCmp('SettingResponderAlertStatus').setValue('ACTIVE');
+                                            Ext.getCmp('SettingResponderAlertStatus').setValue('Active');
 
                                         },
                                         uncheck: function () {
@@ -382,7 +387,7 @@ function SettingResponderAlertDetails() {
                                              check: function () {
 
                                                  Ext.getCmp('SettingResponderAlertRelationShipAlertStatusActive').setChecked(false);
-                                                 Ext.getCmp('SettingResponderAlertStatus').setValue('INACTIVE');
+                                                 Ext.getCmp('SettingResponderAlertStatus').setValue('InActive');
                                              },
                                              uncheck: function () {
 
@@ -417,8 +422,22 @@ function SettingResponderAlertDetails() {
                                    hasDisabled: false,
                                    handler: function () {
 
+                                    var ID=   Ext.getCmp('SettingResponderAlertID').getValue()
+                                    var AccountNo=  Ext.getCmp('SettingResponderAlertAccountNo').getValue()
+                                    var ResponderName=   Ext.getCmp('SettingResponderAlertName').getValue()
+                                    var ResponderRelationShip=   Ext.getCmp('SettingResponderAlertRelationShip').getValue()
+                                    var ResponderPhoneNo=  Ext.getCmp('SettingResponderAlertPhoneNo').getValue()
+                                    var ResponderEmail=  Ext.getCmp('SettingResponderAlertEmail').getValue()
+                                    var Status = Ext.getCmp('SettingResponderAlertStatus').getValue()
+                                    var User = GetCurrentUserName();
+                                    if (_isRealtioshipOter == 'yes')
+                                    {
+                                        ResponderRelationShip = Ext.getCmp('SettingResponderAlertRelationShipTxtOther').getValue()
+                                        Ext.getCmp('SettingResponderAlertRelationShip').setValue(ResponderRelationShip);
+                                    }
 
 
+                                    SettingResponderAlert_Update(ID, AccountNo, ResponderName, ResponderRelationShip, ResponderPhoneNo, ResponderEmail, Status, User)
 
 
                                    }
@@ -517,7 +536,9 @@ function SettingResponderAlertHide() {
 
 
 function SettingResponderAlert_LoadByAccountNoModule(AccountNo,Module) {
-  
+    Ext.Viewport.mask({ xtype: 'loadmask', message: 'Loading data..Please Wait.' });
+    var task = Ext.create('Ext.util.DelayedTask', function () {
+
     _DataStore_ResponderAlert_LoadByAccountNoModule.removeAll();
     _DataStore_ResponderAlert_LoadByAccountNoModule.getProxy().setExtraParams({
        
@@ -540,7 +561,9 @@ function SettingResponderAlert_LoadByAccountNoModule(AccountNo,Module) {
         }
 
     });
-    //return count;
+    Ext.Viewport.setMasked(false);
+    });
+    task.delay(1000);
 }
 
 
@@ -561,4 +584,53 @@ function SettingResponderAlert_SetDetails(ID,AccountNo, ResponderName, Responder
 
     Ext.getCmp('SettingResponderAlertStatus').setValue(Status)
 
+}
+
+
+
+
+
+
+
+function SettingResponderAlert_Update(ID, AccountNo, ResponderName, ResponderRelationShip,
+         ResponderPhoneNo, ResponderEmail, Status, User) {
+             Ext.Viewport.mask({ xtype: 'loadmask', message: 'Updating data..Please Wait.' });
+             var task = Ext.create('Ext.util.DelayedTask', function () {
+
+    Ext.Ajax.request({
+
+        url: document.location.protocol + '//' + document.location.host + '/ResponderAlert/ResponderAlertUpdate',
+
+        params: {
+
+            ID: ID,
+            AccountNo: AccountNo,
+
+            ResponderName: ResponderName,
+
+            ResponderRelationShip: ResponderRelationShip,
+            ResponderPhoneNo: ResponderPhoneNo,
+
+            ResponderEmail: ResponderEmail,
+            Status: Status,
+            User: User
+
+
+
+        },
+        success: function (result, request) {
+            Ext.Msg.alert('Success', 'Update Succesfully');
+
+
+            //  console.log(document.location.protocol + '//' + document.location.host + '/TrackingAppAPI/GeoFence/GeofenceInsert')
+        },
+        failure: function (result, request) {
+            Ext.Msg.alert('Error', request);
+
+        }
+    });
+
+    Ext.Viewport.setMasked(false);
+});
+task.delay(1000);
 }

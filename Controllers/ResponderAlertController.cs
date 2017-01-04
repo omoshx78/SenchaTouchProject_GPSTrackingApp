@@ -75,6 +75,33 @@ namespace TrackingInfo.Controllers
             return Json(new { success = success, message = _Message, total = data.Count, results = data }, JsonRequestBehavior.AllowGet);
         }
 
+
+        [HttpPost]
+        public JsonResult ResponderAlertUpdate(int ID, string AccountNo, string ResponderName, string ResponderRelationShip, string ResponderPhoneNo, string ResponderEmail, string Status, string User)
+        {
+            bool success = true;
+            string _Message = string.Empty;
+            List<ResponderAlertModel> data = new List<ResponderAlertModel>();
+            try
+            {
+                success = ResponderAlertModel.ResponderAlert_Update(ID, AccountNo, ResponderName, ResponderRelationShip, ResponderPhoneNo, ResponderEmail, Status, User);
+            }
+            catch (Exception ex)
+            {
+                _Message = ex.Message;
+                success = false;
+            }
+
+            return Json(new { success = success, message = _Message, total = data.Count, results = data }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+
+
+
+
         [HttpPost]
         public JsonResult ResponderAlertInsertUpdate(int ID, string AccountNo, string ResponderName, string ResponderRelationShip, string ResponderPhoneNo, string ResponderEmail, string Status, string GeofenceStatus, string User)
         {

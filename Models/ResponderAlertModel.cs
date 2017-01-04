@@ -395,5 +395,62 @@ namespace TrackingInfo.Models
             return _value;
         }
 
+
+
+
+
+
+
+
+
+
+        public static bool ResponderAlert_Update(int ID, string AccountNo, string ResponderName, string ResponderRelationShip, string ResponderPhoneNo, string ResponderEmail, string Status, string User)
+        {
+            List<ResponderAlertModel> _Value = new List<ResponderAlertModel>();
+            SqlConnection _SQLConnection = SQLConnectionString.BuildConnection();
+            bool _value = true;
+            using (SqlConnection _DBConnection = _SQLConnection)
+            {
+                SqlCommand _SQLCommand = new SqlCommand();
+                _SQLCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                _SQLCommand.CommandTimeout = 0;
+                using (_SQLCommand)
+                {
+                    try
+                    {
+                        _SQLCommand.Connection = _DBConnection;
+                        _SQLCommand.CommandText = "ResponderAlert_Update";
+                        _SQLCommand.Parameters.AddWithValue("@ID", ID);
+                        _SQLCommand.Parameters.AddWithValue("@AccountNo", AccountNo);
+                        _SQLCommand.Parameters.AddWithValue("@ResponderName", ResponderName);
+                        _SQLCommand.Parameters.AddWithValue("@ResponderRelationShip", ResponderRelationShip);
+                        _SQLCommand.Parameters.AddWithValue("@ResponderPhoneNo", ResponderPhoneNo);
+                        _SQLCommand.Parameters.AddWithValue("@ResponderEmail", ResponderEmail);
+                        _SQLCommand.Parameters.AddWithValue("@Status", Status);                   
+                        _SQLCommand.Parameters.AddWithValue("@User", User);
+
+                        _DBConnection.Open();
+                        _SQLCommand.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        _value = false;
+                    }
+
+                    finally
+                    {
+
+                        _DBConnection.Close();
+
+                    }
+
+                }
+
+            }
+
+            return _value;
+        }
+
     }
 }
