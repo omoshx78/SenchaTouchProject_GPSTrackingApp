@@ -390,7 +390,6 @@
     <Content Include="app\view\gpsSendCommand\mapsendcommands.js" />
     <Content Include="app\view\gpsSendCommand\panelMainmapsendcommand.js" />
     <Content Include="app\view\gpsSendCommand\sendcommand.js" />
-    <Content Include="app\view\gpsTrackingHistory\Gmaphistory.js" />
     <Content Include="app\view\gpsTrackingStreetView\gpsTrackingStreetViewMainHolder.js" />
     <Content Include="app\view\gpsTrackingStreetView\gpsTrackingStreetViewMap.js" />
     <Content Include="app\view\gpsTracking\gpsTrackingItemsList.js" />
@@ -431,6 +430,7 @@
     <Content Include="app\view\TraceAlertFence\listTraceAlertFence.js" />
     <Content Include="app\view\TraceAlertFence\listTraceAlertFenceOri.js" />
     <Content Include="app\view\TrackieItemSendCommand.js" />
+    <Content Include="app\view\TrackingHistory\TrackingHistoryMap.js" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\de\Microsoft.Data.Edm.resources.dll" />
     <Content Include="bin\de\Microsoft.Data.OData.resources.dll" />

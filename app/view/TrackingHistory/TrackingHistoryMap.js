@@ -1,6 +1,6 @@
 ﻿var petahistory ;
 var dialogboxHistoryTimeset;
-Ext.define('MyGPS.view.Gmaphistory', {
+Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
     extend: 'Ext.Panel',
 
 
@@ -17,7 +17,9 @@ Ext.define('MyGPS.view.Gmaphistory', {
 
         layout: { type: 'card', animation: { type: 'slide', direction: 'right' } },
         //layout: 'card',
-        items: [{
+        items: [
+
+            {
 
 
 
@@ -1024,10 +1026,10 @@ Ext.define('MyGPS.view.Gmaphistory', {
                       xtype: 'button',
 
                       id: 'backButtonhistoryploting',
-                      text: '<< Back',
+                      text: '<< vvvvvvBack',
                       handler: function () {
                        //   _valuepanelhistoryPlay.hide();
-                          Ext.getCmp('mainViewgmaphistory').setActiveItem(0);
+                         // Ext.getCmp('mainViewgmaphistory').setActiveItem(0);
                           //if (isrecenter == '1') {
                           //    resetMap();
                           //}
@@ -1386,11 +1388,11 @@ function resetMap() {
 
 function plotingHistoryXypath() {
 
-
+    alert(Ext.getCmp('HistoryTrackingID').getValue());
 
     Ext.getStore('trackingitemhistorystore').getProxy().setExtraParams({
         AccNo: AAccountNo,
-        tracID: Ext.getCmp('HistoryTrackingID').getValue(),
+        tracID: 'WTP2681',
 
 
     });
@@ -1398,9 +1400,9 @@ function plotingHistoryXypath() {
 
     var myStoreH = Ext.getStore('trackingitemhistorystore');
     var modelRecordH = myStoreH.getAt(0);
-    var Did = modelRecordH.get('DeviceID');
-    var TrID = Ext.getCmp('HistoryTrackingID').getValue();
-    var GsimNumber = modelRecordH.get('SimNum');
+    var Did = '359710048057492';
+    var TrID = 'WTP2681';
+    var GsimNumber = '+601110976958';
     //var cooo = myStoreH.getCount();
     // TrackItem
 
@@ -1449,7 +1451,7 @@ function plotingHistoryXypath() {
         // var modelRecord = myStore.getAt(0);
         // alert(co);
 
-        TrackItem = modelRecordH.get('TrackItem');
+        TrackItem ='PROTON PERSONA';
         //pointCount = co;
 
         //Ext.getStore('trackingitemhistorystore').getProxy().setExtraParams({
