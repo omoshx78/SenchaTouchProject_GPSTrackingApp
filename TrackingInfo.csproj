@@ -430,6 +430,7 @@
     <Content Include="app\view\TraceAlertFence\listTraceAlertFence.js" />
     <Content Include="app\view\TraceAlertFence\listTraceAlertFenceOri.js" />
     <Content Include="app\view\TrackieItemSendCommand.js" />
+    <Content Include="app\view\TrackingHistory\TrackingHistoryCreateria.js" />
     <Content Include="app\view\TrackingHistory\TrackingHistoryMap.js" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\de\Microsoft.Data.Edm.resources.dll" />

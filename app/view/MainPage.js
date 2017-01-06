@@ -55,7 +55,7 @@
           
            {
                //5
-               xtype: 'gMapHistory',
+               xtype: 'TrackingHistoryCreateria',
                //style: "background-color: #FF9900; color:white;",
                //html: '<center>Item 2</center>'
            },
