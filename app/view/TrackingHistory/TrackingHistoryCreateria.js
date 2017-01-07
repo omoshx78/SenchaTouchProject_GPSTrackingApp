@@ -125,8 +125,14 @@ xtype:'spacer'
       //  iconCls: 'home',
       // html: '<div ><img src="resources/icons/hideGeofence.png" width="33" height="23" alt="Company Name"></div>',
       ui: 'decline',
-      handler: function () {
-          Ext.getCmp('mainView').setActiveItem(1);
+      handler: function (button) {
+
+      
+
+
+
+          Ext.getCmp('mainView').setActiveItem(11);
+          plotingHistoryXypath();
       }
 
 
@@ -188,15 +194,26 @@ xtype:'spacer'
                     labelWidth: '40%',
                     //store: 'multipletrackingitemselectFID',
                     store: 'TrackingItemList',
-                    valueField: 'DeviceID',
+                    valueField: 'Spare4',
                     displayField: 'TrackID',
                     //listeners: {
-                    //    change: function () {
+                    //    change: function (field, value) {
 
-                    //        }
-
-
+                        
+                    //    },
                     //}
+                    listeners: {
+                        change: function () {
+                            var str = Ext.getCmp('selectfieldTrackingHistoryCreateriaID').getValue()
+                            var str_array = str.split(',');
+                            _trackingHistoryMapConfig_trackID = str_array[0];
+                            _trackingHistoryMapConfig_DeviceID = str_array[1];
+                           
+                          
+                            }
+
+
+                    }
 
                 },
 
@@ -243,6 +260,9 @@ xtype:'spacer'
                         check: function () {
                             Ext.getCmp('fieldsetTrackingHistoryCreateriaDateTime').setHidden(true);
                             Ext.getCmp('htmlUserdefinedID').setHidden(true);
+                            _trackingHistoryMapConfig_creteria = 'Today';
+                         
+
                             //Ext.getCmp('SelectField3').setDisabled(true);
                             //Ext.getCmp('SelectTxtValStrID').setDisabled(true);
                             //Ext.getCmp('SelectPatient_SelUnit').setDisabled(true);
@@ -260,6 +280,7 @@ xtype:'spacer'
                     id: 'SelectSearchByYesterday',
                     listeners: {
                         check: function () {
+                            _trackingHistoryMapConfig_creteria = 'Yesterday';
                             Ext.getCmp('fieldsetTrackingHistoryCreateriaDateTime').setHidden(true);
                             Ext.getCmp('htmlUserdefinedID').setHidden(true);
                             //Ext.getCmp('SelectField3').setDisabled(false);
@@ -281,6 +302,7 @@ xtype:'spacer'
                   
                     listeners: {
                         check: function () {
+                            _trackingHistoryMapConfig_creteria = 'Hour ago';
                             Ext.getCmp('fieldsetTrackingHistoryCreateriaDateTime').setHidden(true);
                             Ext.getCmp('htmlUserdefinedID').setHidden(true);
                             //Ext.getCmp('SelectField3').setDisabled(false);
@@ -303,7 +325,7 @@ xtype:'spacer'
                      
                       listeners: {
                           check: function () {
-
+                              _trackingHistoryMapConfig_creteria = 'User Defined';
                               //Ext.getCmp('SelectField3').setDisabled(false);
                               //Ext.getCmp('SelectTxtValStrID').setDisabled(false);
                               //Ext.getCmp('SelectPatient_SelUnit').setDisabled(true);
@@ -373,7 +395,11 @@ xtype:'spacer'
                                                listeners: {
                                                    change: function () {
 
-                                                       dateFromFormated = Ext.Date.format(new Date(Ext.getCmp('TrackingHistoryCreateriaFromDate').getValue()), 'Y-m-d');
+                                                      // dateFromFormated = Ext.Date.format(new Date(Ext.getCmp('TrackingHistoryCreateriaFromDate').getValue()), 'Y-m-d');
+
+
+                                                        _trackingHistoryMapConfig_dateFromFormated = Ext.Date.format(new Date(Ext.getCmp('TrackingHistoryCreateriaFromDate').getValue()), 'Y-m-d');
+                                                     
 
                                                    }
                                                }
@@ -539,21 +565,28 @@ xtype:'spacer'
                                                               change: function (picker, value, eOpts) {
                                                                   // alert(value.hour + ':' + value.minute);
                                                                   // Ext.getCmp('').setHidden(true);
+
+
+                                                                   _trackingHistoryMapConfig_timeFrom = (value.hour + ':' + value.minute);
+                                                                
+
+
+
                                                                   Ext.getCmp('txttimefrom').setValue(value.hour + ':' + value.minute);
-                                                                  timeFrom = (value.hour + ':' + value.minute);
-                                                                  Ext.Viewport.mask({ xtype: 'loadmask', message: 'Please Wait..' });
-                                                                  var task = Ext.create('Ext.util.DelayedTask', function () {
-                                                                      Ext.getStore('trackingitemhistorystore').getProxy().setExtraParams({
-                                                                          AccNo: AAccountNo,
-                                                                          tracID: Ext.getCmp('HistoryTrackingID').getValue(),
+                                                                  //timeFrom = (value.hour + ':' + value.minute);
+                                                                  //Ext.Viewport.mask({ xtype: 'loadmask', message: 'Please Wait..' });
+                                                                  //var task = Ext.create('Ext.util.DelayedTask', function () {
+                                                                  //    Ext.getStore('trackingitemhistorystore').getProxy().setExtraParams({
+                                                                  //        AccNo: AAccountNo,
+                                                                  //        tracID: Ext.getCmp('HistoryTrackingID').getValue(),
 
 
-                                                                      });
-                                                                      Ext.StoreMgr.get('trackingitemhistorystore').load();
-                                                                      Ext.Viewport.unmask();
-                                                                  });
+                                                                  //    });
+                                                                  //    Ext.StoreMgr.get('trackingitemhistorystore').load();
+                                                                  //    Ext.Viewport.unmask();
+                                                                  //});
 
-                                                                  task.delay(1000);
+                                                                  //task.delay(1000);
                                                               }
                                                           },
                                                           slots: [{
@@ -728,23 +761,10 @@ xtype:'spacer'
                                                  useTitles: true,
                                                  listeners: {
                                                      change: function (picker, value, eOpts) {
-                                                         // alert(value.hour + ':' + value.minute);
-                                                         // Ext.getCmp('').setHidden(true);
-                                                         Ext.getCmp('txttimefrom').setValue(value.hour + ':' + value.minute);
-                                                         timeFrom = (value.hour + ':' + value.minute);
-                                                         Ext.Viewport.mask({ xtype: 'loadmask', message: 'Please Wait..' });
-                                                         var task = Ext.create('Ext.util.DelayedTask', function () {
-                                                             Ext.getStore('trackingitemhistorystore').getProxy().setExtraParams({
-                                                                 AccNo: AAccountNo,
-                                                                 tracID: Ext.getCmp('HistoryTrackingID').getValue(),
+                                                          _trackingHistoryMapConfig_timeTo = (value.hour + ':' + value.minute);
+                                                        
+                                                          Ext.getCmp('txttimeto').setValue(value.hour + ':' + value.minute);
 
-
-                                                             });
-                                                             Ext.StoreMgr.get('trackingitemhistorystore').load();
-                                                             Ext.Viewport.unmask();
-                                                         });
-
-                                                         task.delay(1000);
                                                      }
                                                  },
                                                  slots: [{

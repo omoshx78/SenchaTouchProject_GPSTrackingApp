@@ -154,5 +154,31 @@ namespace TrackingInfo.Controllers
 
             return Json(new { success = success, message = _Message, total = data.Count, results = data }, JsonRequestBehavior.AllowGet);
         }
+
+
+
+
+
+
+        [HttpGet]
+
+        public JsonResult SignalHistoryLoadByCreateria(string Createria ,string DeviceID, string TrackID, string AccountNo, string DateFrom, string DateTo)
+        {
+            bool success = true;
+            string _Message = string.Empty;
+            List<SignalsModel> data = new List<SignalsModel>();
+            try
+            {
+                data = SignalsModel.SignalHistory_LoadByCreateria(Createria,DeviceID, TrackID, AccountNo, DateFrom, DateTo);
+            }
+            catch (Exception ex)
+            {
+                _Message = ex.Message;
+                success = false;
+            }
+
+            return Json(new { success = success, message = _Message, total = data.Count, results = data }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

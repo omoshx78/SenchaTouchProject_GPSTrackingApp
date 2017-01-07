@@ -1,4 +1,7 @@
-﻿Ext.define('MyGPS.model.TrackingItem', {
+﻿
+
+//spare4   _SQLDataReader["TrackID"].ToString() + ',' + _SQLDataReader["DeviceID"].ToString()
+Ext.define('MyGPS.model.TrackingItem', {
     extend: 'Ext.data.Model',
     config: {
         fields: [

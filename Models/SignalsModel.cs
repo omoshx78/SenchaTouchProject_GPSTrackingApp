@@ -329,7 +329,22 @@ namespace TrackingInfo.Models
         }
 
 
+        public string Altitude
+        {
+            get;
+            set;
+        }
+        public string GSMSignalReading
+        {
+            get;
+            set;
+        }
 
+        public string TerminalState
+        {
+            get;
+            set;
+        }
         public static List<SignalsModel> Get_SignalsSingleTracking(string TrackID, string AccountNo)
         {
 
@@ -854,7 +869,7 @@ namespace TrackingInfo.Models
 
 
 
-        public static List<SignalsModel> Get_SignalsHistory(string DeviceID,string TrackID,string GPSSimNumber,string DateFrom,string DateTo)
+        public static List<SignalsModel>  Get_SignalsHistory(string DeviceID,string TrackID,string GPSSimNumber,string DateFrom,string DateTo)
         {
 
             List<SignalsModel> _Value = new List<SignalsModel>();
@@ -912,6 +927,125 @@ namespace TrackingInfo.Models
                            // _result.AccountNo = _SQLDataReader["AccountNo"].ToString();
                             _result.DateDT = _SQLDataReader["DateDT"].ToString();
 
+
+
+
+
+
+
+
+
+
+
+                            _Value.Add(_result);
+
+                        }
+
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        throw new Exception(ex.Message);
+
+                    }
+
+                    finally
+                    {
+
+                        _DBConnection.Close();
+
+                    }
+
+                }
+
+            }
+
+
+
+            return _Value;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public static List<SignalsModel> SignalHistory_LoadByCreateria(string Createria, string DeviceID, string TrackID, string AccountNo, string DateFrom, string DateTo)
+        {
+
+            List<SignalsModel> _Value = new List<SignalsModel>();
+
+            //SqlConnection _SQLConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DentalAppConn"].ConnectionString);
+            SqlConnection _SQLConnection = SQLConnectionString.BuildConnection();
+
+            using (SqlConnection _DBConnection = _SQLConnection)
+            {
+
+                SqlCommand _SQLCommand = new SqlCommand();
+
+                _SQLCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                _SQLCommand.CommandTimeout = 0;
+
+
+
+                using (_SQLCommand)
+                {
+
+                    try
+                    {
+
+                        _SQLCommand.Connection = _DBConnection;
+                        _SQLCommand.CommandText = "SignalHistory_LoadByCreateria";
+                        _SQLCommand.Parameters.AddWithValue("@Createria ", Createria);
+                        _SQLCommand.Parameters.AddWithValue("@DeviceID", DeviceID);
+                        _SQLCommand.Parameters.AddWithValue("@TrackID", TrackID);
+                        _SQLCommand.Parameters.AddWithValue("@AccountNo ", AccountNo);
+                        _SQLCommand.Parameters.AddWithValue("@DateFrom", DateFrom);
+                        _SQLCommand.Parameters.AddWithValue("@DateTo", DateTo);
+                        _DBConnection.Open();
+
+
+                        SqlDataReader _SQLDataReader = _SQLCommand.ExecuteReader();
+
+                        SignalsModel _result;
+
+                        while (_SQLDataReader.Read())
+                        {
+
+
+                            _result = new SignalsModel();
+
+                            _result.Longitude = _SQLDataReader["Longitude"].ToString();
+                            _result.Latitude = _SQLDataReader["Latitude"].ToString();
+                            _result.Speed = _SQLDataReader["Speed"].ToString();
+                            _result.DateDT = _SQLDataReader["DateDT"].ToString();
+                            _result.BatteryReading = _SQLDataReader["BatteryReading"].ToString();
+                            _result.Direction = _SQLDataReader["Direction"].ToString();
+                            _result.Altitude = _SQLDataReader["Altitude"].ToString();
+                            _result.GSMSignalReading = _SQLDataReader["GSMSignalReading"].ToString();
+                            _result.TerminalState = _SQLDataReader["TerminalState"].ToString();
+                            _result.TrackID = _SQLDataReader["TrackID"].ToString();
+                            _result.TrackItem = _SQLDataReader["TrackItem"].ToString();
 
 
 

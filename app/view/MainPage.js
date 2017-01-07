@@ -89,9 +89,9 @@
                xtype: 'listMainSetting',
                
            },
-        //{ //11
-        //    xtype: 'TrackingItemListXtype',
-        //},
+        { //11
+            xtype: 'HistoryMap',
+        },
         {
             style: "background-color: #006600; color:white;",
             html: '<center>Item 3</center>'

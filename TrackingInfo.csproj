@@ -267,6 +267,7 @@
     <Content Include="app\model\singlesignalTrackingmodel.js" />
     <Content Include="app\model\testlist.js" />
     <Content Include="app\model\TrackerDeviceModel.js" />
+    <Content Include="app\model\TrackingHistory\TrackingHistoryModel.js" />
     <Content Include="app\model\TrackingItem.js" />
     <Content Include="app\model\TrackingItemAdjusted.js" />
     <Content Include="app\model\TrackingItemCheckIDmodel.js" />
@@ -307,6 +308,7 @@
     <Content Include="app\store\singlesignalstore.js" />
     <Content Include="app\store\singlesignalTrackingstore.js" />
     <Content Include="app\store\TrackerDevicestore.js" />
+    <Content Include="app\store\TrackingHistoryMap\TrackingHistoryMapStore.js" />
     <Content Include="app\store\TrackingItemCheckIDstore.js" />
     <Content Include="app\store\TrackingItemDetailstore.js" />
     <Content Include="app\store\trackingitemhistorystore.js" />
@@ -320,6 +322,7 @@
     <Content Include="app\view\about\abouts.js" />
     <Content Include="app\view\about\panelabout.js" />
     <Content Include="app\view\Config\MilageCountInfo\GetCurrentData.js" />
+    <Content Include="app\view\Config\TrackingHistoryMap\TrackingHistoryMapConfig.js" />
     <Content Include="app\view\Config\TrackingItems\TrackingItemsConfig.js" />
     <Content Include="app\view\Config\User\UserConfig.js" />
     <Content Include="app\view\connection.js" />
@@ -432,6 +435,7 @@
     <Content Include="app\view\TrackieItemSendCommand.js" />
     <Content Include="app\view\TrackingHistory\TrackingHistoryCreateria.js" />
     <Content Include="app\view\TrackingHistory\TrackingHistoryMap.js" />
+    <Content Include="app\view\TrackingHistory\TrackingHistoryMapInfoPanel.js" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\de\Microsoft.Data.Edm.resources.dll" />
     <Content Include="bin\de\Microsoft.Data.OData.resources.dll" />

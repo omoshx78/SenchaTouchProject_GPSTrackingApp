@@ -527,7 +527,7 @@ namespace TrackingInfo.Models
                             _result.Spare1 = _SQLDataReader["Spare1"].ToString();
                             _result.Spare2 = _SQLDataReader["Spare2"].ToString();
                             _result.Spare3 = _SQLDataReader["Spare3"].ToString();
-                            _result.Spare4 = _SQLDataReader["Spare4"].ToString();
+                            _result.Spare4 = _SQLDataReader["TrackID"].ToString() + ',' + _SQLDataReader["DeviceID"].ToString();
 
                             _result.Spare5 = _SQLDataReader["Spare5"].ToString();
                             _result.Spare6 = _SQLDataReader["Spare6"].ToString();
