@@ -37,10 +37,10 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
 
 
 
-         streetViewControl: true,
-         streetViewControlOptions: {
-             position: google.maps.ControlPosition.TOP_RIGHT,
-         },
+         //streetViewControl: false,
+         //streetViewControlOptions: {
+         //    position: google.maps.ControlPosition.TOP_RIGHT,
+         //},
          mapTypeControl: true,
          mapTypeControlOptions: {
              style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
@@ -93,6 +93,7 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                                 Ext.getCmp('mainView').setActiveItem(1);
                                 SetTrackingHistoryMapInfoPanelHide();
                                 TrackingHistoryMapPlayTrackedPanelHide();
+                                TrackingHistoryMapTravelRangePanelHide();
                                 if (isrecenter == '1') {
                                     resetMap();
                                 }
@@ -149,6 +150,8 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                           //this.overlay.show();
                           SetTrackingHistoryMapInfoPanelShow();
                           SetTrackingHistoryMapInfoPanelDetails();
+                          TrackingHistoryMapPlayTrackedPanelShow();
+                          TrackingHistoryMapTravelRangePanelShow();
                       
                       }
                   },
@@ -164,6 +167,7 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                        handler: function () {
                            SetTrackingHistoryMapInfoPanelHide();
                            TrackingHistoryMapPlayTrackedPanelHide();
+                           TrackingHistoryMapTravelRangePanelHide();
                            Ext.getCmp('mainView').setActiveItem(5);
                            if (isrecenter == '1') {
                                resetMap();
@@ -291,14 +295,40 @@ function plotingHistoryXypath() {
             }
            
             isrecenter = '1';
-            drawlinexypathhistory(pathXY);
+            Ext.Viewport.unmask();
+
+
+            Ext.Viewport.mask({ xtype: 'loadmask', message: 'Ploting Start Point....' });
+            var task = Ext.create('Ext.util.DelayedTask', function () {
+            markerFirstPoint(Xarr[0], Yarr[0], Spdarr[0], DTarr[0]);
+            Ext.Viewport.unmask();
+            });
+            task.delay(1000);
+
+
+
+            Ext.Viewport.mask({ xtype: 'loadmask', message: 'Ploting End Point....' });
+            var task = Ext.create('Ext.util.DelayedTask', function () {
+                markerLastPoint(Xarr[ii - 1], Yarr[ii - 1], Spdarr[ii - 1], DTarr[ii - 1]);
+                Ext.Viewport.unmask();
+            });
+            task.delay(1000);
+       
+
+            Ext.Viewport.mask({ xtype: 'loadmask', message: 'Drawing Route Path....' });
+            var task = Ext.create('Ext.util.DelayedTask', function () {
+                   drawlinexypathhistory(pathXY);
+                Ext.Viewport.unmask();
+            });
+            task.delay(1000);
+        
         } else {
             isrecenter = '0';
             Ext.Msg.alert("No Signal Point Detected.!!");
            
         }
 
-        Ext.Viewport.unmask();
+    
 
     });
     task.delay(2000);
@@ -316,6 +346,89 @@ var travellength;
 var travellengthkm;
 var marker, i;
 var pointCount;
+
+
+function markerFirstPoint(Long,Lat,Speed,DT)
+{
+    var i = 0;
+    var bounds = new google.maps.LatLngBounds();
+    var point = new google.maps.LatLng(Lat, Long);
+    bounds.extend(point);
+
+    var image = {
+        url: ip + 'FirstPoint.png', // url
+        scaledSize: new google.maps.Size(80, 80), // scaled size
+        //  origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(40, 40) // anchor
+    };
+
+
+  var  markerFisrt = new google.maps.Marker({
+        //    position: new google.maps.LatLng(locations[i][0], locations[i][1]),
+      position: new google.maps.LatLng(Lat, Long),
+        animation: google.maps.Animation.DROP,
+        icon: image,
+        map: petahistory
+  });
+  petahistory.fitBounds(bounds);
+  markersArray.push(markerFisrt);
+  google.maps.event.addListener(markerFisrt, 'mousedown', (function (markerFisrt, i) {
+
+
+      return function () {
+          var infowindow = new google.maps.InfoWindow();
+          var dt = DT.replace(/(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}/g, '');
+
+
+          infowindow.setContent("<font color=red>Signal seq:<b>" + i + "</b><br> Speed :<b>" + Speed + "km/h</b><br> Time :<b>" + dt + "</b></font>");
+          infowindow.open(petahistory, markerFisrt);
+      }
+  })
+(markerFisrt, i));
+}
+
+
+
+function markerLastPoint(Long, Lat, Speed, DT) {
+    var i = _trackingHistoryMapConfig_pointCount-1 ;
+   
+  
+    var bounds = new google.maps.LatLngBounds();
+    var point = new google.maps.LatLng(Lat, Long);
+    bounds.extend(point);
+
+   var image = {
+       url: ip + 'LastPoint.png', // url
+        scaledSize: new google.maps.Size(80, 80), // scaled size
+        //  origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(40, 40) // anchor
+    };
+
+
+    var markerLast = new google.maps.Marker({
+        //    position: new google.maps.LatLng(locations[i][0], locations[i][1]),
+        position: new google.maps.LatLng(Lat, Long),
+        animation: google.maps.Animation.DROP,
+        icon: image,
+        map: petahistory
+    });
+    petahistory.fitBounds(bounds);
+    markersArray.push(markerLast);
+    google.maps.event.addListener(markerLast, 'mousedown', (function (markerLast, i) {
+
+
+        return function () {
+            var infowindow = new google.maps.InfoWindow();
+            var dt = DT.replace(/(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}/g, '');
+
+
+            infowindow.setContent("<font color=red>Signal seq:<b>" + i + "</b><br> Speed :<b>" + Speed + "km/h</b><br> Time :<b>" + dt + "</b></font>");
+            infowindow.open(petahistory, markerLast);
+        }
+    })
+  (markerLast, i));
+}
+
 //var flightPlanCoordinates = new Array();
 function drawlinexypathhistory(XYhistoryPath) {
     // flightPlanCoordinates.length = 0;
@@ -336,16 +449,16 @@ function drawlinexypathhistory(XYhistoryPath) {
             // bounds.extend(point);
             var point = new google.maps.LatLng(Yarr[i], Xarr[i]);
             bounds.extend(point);
-            //  console.log(locations[i][0], locations[i][1]);
-            marker = new google.maps.Marker({
-                //    position: new google.maps.LatLng(locations[i][0], locations[i][1]),
-                position: new google.maps.LatLng(Yarr[i], Xarr[i]),
-                animation: google.maps.Animation.DROP,
-                //icon: imagie,
-                map: petahistory
-            });
+      
+            ////////marker = new google.maps.Marker({
+             
+            ////////    position: new google.maps.LatLng(Yarr[i], Xarr[i]),
+            ////////    animation: google.maps.Animation.DROP,
+            ////////    //icon: imagie,
+            ////////    map: petahistory
+            ////////});
 
-            markersArray.push(marker);
+            ////////markersArray.push(marker);
 
 
 
@@ -371,19 +484,19 @@ function drawlinexypathhistory(XYhistoryPath) {
             travellength = +Math.floor(polyLengthInMeters);
 
 
-            google.maps.event.addListener(marker, 'mousedown', (function (marker, i) {
+    ////////        google.maps.event.addListener(marker, 'mousedown', (function (marker, i) {
 
 
-                return function () {
-                    var infowindow = new google.maps.InfoWindow();
-                    var dt = DTarr[i].replace(/(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}/g, '');
+    ////////            return function () {
+    ////////                var infowindow = new google.maps.InfoWindow();
+    ////////                var dt = DTarr[i].replace(/(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}/g, '');
 
 
-                    infowindow.setContent("<font color=red>Signal seq:<b>" + i + "</b><br> Speed :<b>" + Spdarr[i] + "km/h</b><br> Time :<b>" + dt + "</b></font>");
-                    infowindow.open(petahistory, marker);
-                }
-            })
-    (marker, i));
+    ////////                infowindow.setContent("<font color=red>Signal seq:<b>" + i + "</b><br> Speed :<b>" + Spdarr[i] + "km/h</b><br> Time :<b>" + dt + "</b></font>");
+    ////////                infowindow.open(petahistory, marker);
+    ////////            }
+    ////////        })
+    ////////(marker, i));
 
 
         }
@@ -393,7 +506,8 @@ function drawlinexypathhistory(XYhistoryPath) {
         _trackingHistoryMapConfig_travellengthkm = travellengthkm.toFixed(1) + " KM";
         SetTrackingHistoryMapInfoPanelShow();
         SetTrackingHistoryMapInfoPanelDetails();
-
+        TrackingHistoryMapPlayTrackedPanelShow();
+        TrackingHistoryMapTravelRangePanelShow();
         firstime = '1';
       
       //  Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travellengthkm.toFixed(1) + " KM" + "| Point:" + pointCount + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
@@ -509,20 +623,21 @@ function loopingXY(number) {
     if (number == "1") {
 
         ttpoint = Xarr.length - 1
-        //  alert(XYinit);
-      //  Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">Calculating..</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
+        
+
         if (markersArray) {
             for (i in markersArray) {
                 markersArray[i].setMap(null);
             }
             markersArray.length = 0;
         }
-        if (lineXYpath) {
-            for (i in lineXYpath) {
-                lineXYpath[i].setMap(null);
-            }
-            lineXYpath.length = 0;
-        }
+
+        //////////////if (lineXYpath) {
+        //////////////    for (i in lineXYpath) {
+        //////////////        lineXYpath[i].setMap(null);
+        //////////////    }
+        //////////////    lineXYpath.length = 0;
+        //////////////}
     }
     var rnumber = number - 1;
 
@@ -566,7 +681,7 @@ function loopingXY(number) {
     //  travellength = +Math.floor(polyLengthInMeters);
 
     SetTrackingHistoryMapInfoPanelDetailsPlay(calcDistance(p1, p2));
-
+    SetTTrackingHistoryMapTravelRangePanel(calcDistance(p1, p2));
 //// Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + calcDistance(p1, p2) + " KM | Total Point:" + ttpoint + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
 
 
@@ -599,77 +714,14 @@ function loopingXY(number) {
 (marker, rnumber));
 
 
-    //  console.log(rnumber+'-----'+number + '-------' + pointCount)
 
-    if (number == pointCount) {
 
-        Ext.Msg.show({
-            title: 'DONE..',
-            message: 'Draw line over point?',
-            width: 500,
-            buttons: Ext.MessageBox.YESNO,
-            iconCls: Ext.MessageBox.INFO,
-            fn: function (buttonId) {
-                if (buttonId != "yes") {
-                    firstime = '1';
-                    resumeCounter = 0;
-                    counter = 0;
-                    btnplay.setHtml('<div ><img src="resources/icons/playhistory.png" width="40" height="40" alt="Company Name"></div>');
-                    //  Ext.getCmp('playTrackhistorylbl').setHtml('<div ><img src="resources/icons/playhistory.png" width="40" height="40" alt="Company Name"></div>');
-                    firstime = '1'; return;
-                }
-                Ext.Viewport.mask({ xtype: 'loadmask', message: 'Drawing Line...' });
-                var task = Ext.create('Ext.util.DelayedTask', function () {
+    //////////////////////////////if (number == pointCount) {
 
 
 
-
-                    var flightPlanCoordinates = new Array();
-
-                    var points;
-
-                    for (i = 0; i < Xarr.length; i++) {
-                        //var point = new google.maps.LatLng(locations[i][0], locations[i][1]);
-                        // bounds.extend(point);
-                        points = new google.maps.LatLng(Yarr[i], Xarr[i]);
-                        flightPlanCoordinates.push(points);
-                    }
-
-
-
-
-                    var flightPath = new google.maps.Polyline({
-                        path: flightPlanCoordinates,
-                        geodesic: true,
-                        strokeColor: '#FF0000',
-                        strokeOpacity: 1.0,
-                        strokeWeight: 2
-                    });
-
-                    lineXYpath.push(flightPath);
-
-                    flightPath.setMap(petahistory);
-                    polyLengthInMeters = google.maps.geometry.spherical.computeLength(flightPath.getPath().getArray());
-                    // var travellength = parseInt(polyLengthInMeters);
-                    travellength = +Math.floor(polyLengthInMeters);
-
-                //    SetTrackingHistoryMapInfoPanelDetailsPlay(travellengthkm.toFixed(1));
-                  //  Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travellengthkm.toFixed(1) + " KM | Total Point:" + ttpoint + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
-                    firstime = '1';
-                    resumeCounter = 0;
-                    counter = 0;
-                    btnplay.setHtml('<div ><img src="resources/icons/playhistory.png" width="40" height="40" alt="Company Name"></div>');
-                    Ext.Viewport.unmask();
-                });
-                task.delay(2000);
-
-            }
-        });
-
-
-
-    }
-    //drawline(Xarr[rnumber], Yarr[rnumber]);
+    //////////////////////////////}
+  
 
 
 
@@ -737,5 +789,54 @@ function resetMap() {
     task.delay(1000);
 
 
+
+}
+
+
+
+
+
+
+var myStore;
+var clickedPlay = false;
+var secplay = 0;
+var resumeCounter;
+var clockPlay;
+var btnplay;
+var firstime;
+var isfirstime = 'yes';
+var plystatus = 'play';
+
+
+function resumeWatchclockPlay() {
+    var maxLoops = Xarr.length;
+
+
+    (function next() {
+        //  console.log(counter + "------" + plystatus + "---" + resumeCounter);
+        if (counter++ >= maxLoops) return;
+
+        myVar = setTimeout(function () {
+            if (plystatus == 'play') {
+                // _valuepanelStatusPlay.show();
+                //current.getEl().fadeOut({ duration: 2000 });
+                //current = current == one ? two : one;
+                //current.getEl().fadeIn({ duration: 2000 });
+                loopingXY(counter);
+                next();
+            }
+            if (plystatus == 'pause') {
+                resumeCounter = counter;
+                counter = maxLoops + 2;
+            }
+            if (plystatus == 'resume') {
+
+
+                loopingXY(counter);
+                //  plystatus = 'play';
+                next();
+            }
+        }, 1000);
+    })();
 
 }

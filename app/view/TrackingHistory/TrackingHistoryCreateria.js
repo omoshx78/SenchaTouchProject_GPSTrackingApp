@@ -235,7 +235,8 @@ xtype:'spacer'
                             _trackingHistoryMapConfig_trackID = str_array[0];
                             _trackingHistoryMapConfig_DeviceID = str_array[1];                           
                             _trackingHistoryMapConfig_trackItem = str_array[2];
-                            console.log(_trackingHistoryMapConfig_trackItem);
+                            _trackingHistoryMapConfig_trackingItemType = str_array[3];
+                            console.log(_trackingHistoryMapConfig_trackingItemType);
                           
                             }
 

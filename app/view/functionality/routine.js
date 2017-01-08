@@ -1484,49 +1484,49 @@ function stopClockSingle() {
 }
 
 //////////////////////////////////////////// timer/////////////////////////////
-var myStore;
-var clickedPlay = false;
-var secplay = 0;
-var resumeCounter;
-var clockPlay;
-var btnplay;
-var firstime;
-var isfirstime = 'yes';
-var plystatus='play';
+////////////////////////////////var myStore;
+////////////////////////////////var clickedPlay = false;
+////////////////////////////////var secplay = 0;
+////////////////////////////////var resumeCounter;
+////////////////////////////////var clockPlay;
+////////////////////////////////var btnplay;
+////////////////////////////////var firstime;
+////////////////////////////////var isfirstime = 'yes';
+////////////////////////////////var plystatus='play';
 
 
-function resumeWatchclockPlay() {
-    var maxLoops = Xarr.length;
+////////////////////////////////function resumeWatchclockPlay() {
+////////////////////////////////    var maxLoops = Xarr.length;
    
 
-    (function next() {
-      //  console.log(counter + "------" + plystatus + "---" + resumeCounter);
-        if (counter++ >= maxLoops) return;
+////////////////////////////////    (function next() {
+////////////////////////////////      //  console.log(counter + "------" + plystatus + "---" + resumeCounter);
+////////////////////////////////        if (counter++ >= maxLoops) return;
 
-        myVar = setTimeout(function () {
-            if (plystatus == 'play') {
-                // _valuepanelStatusPlay.show();
-                //current.getEl().fadeOut({ duration: 2000 });
-                //current = current == one ? two : one;
-                //current.getEl().fadeIn({ duration: 2000 });
-                loopingXY(counter);
-                next();
-            }
-            if (plystatus == 'pause') {
-                resumeCounter = counter;
-                counter = maxLoops + 2;
-            }
-            if (plystatus == 'resume') {
+////////////////////////////////        myVar = setTimeout(function () {
+////////////////////////////////            if (plystatus == 'play') {
+////////////////////////////////                // _valuepanelStatusPlay.show();
+////////////////////////////////                //current.getEl().fadeOut({ duration: 2000 });
+////////////////////////////////                //current = current == one ? two : one;
+////////////////////////////////                //current.getEl().fadeIn({ duration: 2000 });
+////////////////////////////////                loopingXY(counter);
+////////////////////////////////                next();
+////////////////////////////////            }
+////////////////////////////////            if (plystatus == 'pause') {
+////////////////////////////////                resumeCounter = counter;
+////////////////////////////////                counter = maxLoops + 2;
+////////////////////////////////            }
+////////////////////////////////            if (plystatus == 'resume') {
               
                
-                loopingXY(counter);
-                //  plystatus = 'play';
-                next();
-            }
-        }, 1000);
-    })();
+////////////////////////////////                loopingXY(counter);
+////////////////////////////////                //  plystatus = 'play';
+////////////////////////////////                next();
+////////////////////////////////            }
+////////////////////////////////        }, 1000);
+////////////////////////////////    })();
 
-}
+////////////////////////////////}
 //function stopClockPlay() {
 //    window.clearInterval(myVar);
    

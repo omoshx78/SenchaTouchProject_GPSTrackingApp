@@ -102,8 +102,8 @@ function TrackingHistoryMapInfoPanel()
 
                         //}
                         //this.overlay.show();
-                        TrackingHistoryMapPlayTrackedPanelShow();
-
+                        //TrackingHistoryMapPlayTrackedPanelShow();
+                        //TrackingHistoryMapTravelRangePanelShow();
                         btnplay = btn;
                         //  btn.setHtml('<div ><img src="resources/icons/pausehistory.png" width="40" height="40" alt="Company Name"></div>');
 
@@ -151,6 +151,7 @@ function TrackingHistoryMapInfoPanel()
                     handler: function () {
                         SetTrackingHistoryMapInfoPanelHide();
                         TrackingHistoryMapPlayTrackedPanelHide();
+                        TrackingHistoryMapTravelRangePanelHide();
                         //_valuepanelhistoryPlay.hide();
                         //_valuepanelhistoryinfo.hide();
                     }
@@ -221,3 +222,4 @@ function SetTrackingHistoryMapInfoPanelDetailsPlay(travelKM)
     }
 
 }
+

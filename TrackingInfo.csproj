@@ -437,6 +437,7 @@
     <Content Include="app\view\TrackingHistory\TrackingHistoryMap.js" />
     <Content Include="app\view\TrackingHistory\TrackingHistoryMapInfoPanel.js" />
     <Content Include="app\view\TrackingHistory\TrackingHistoryMapPlayTrackedPanel.js" />
+    <Content Include="app\view\TrackingHistory\TrackingHistoryMapTravelRangePanel.js" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\de\Microsoft.Data.Edm.resources.dll" />
     <Content Include="bin\de\Microsoft.Data.OData.resources.dll" />
