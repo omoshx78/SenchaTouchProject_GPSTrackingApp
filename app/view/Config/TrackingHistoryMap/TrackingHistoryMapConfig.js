@@ -4,15 +4,15 @@
 
 
 
-var _trackingHistoryMapConfig_dateFromFormated;
-var _trackingHistoryMapConfig_timeFrom;
-var _trackingHistoryMapConfig_timeTo;
-var _trackingHistoryMapConfig_travellengthkm;
-var _trackingHistoryMapConfig_pointCount;
-var _trackingHistoryMapConfig_trackItem;
-var _trackingHistoryMapConfig_creteria;
-var _trackingHistoryMapConfig_trackID;
-var _trackingHistoryMapConfig_DeviceID;
+var _trackingHistoryMapConfig_dateFromFormated='Please Select!';
+var _trackingHistoryMapConfig_timeFrom = 'Please Select!';
+var _trackingHistoryMapConfig_timeTo = 'Please Select!';
+var _trackingHistoryMapConfig_travellengthkm = 'N/A';
+var _trackingHistoryMapConfig_pointCount = 'No Point!';
+var _trackingHistoryMapConfig_trackItem = 'Please Select!';
+var _trackingHistoryMapConfig_creteria='no';
+var _trackingHistoryMapConfig_trackID = 'Please Select!';
+var _trackingHistoryMapConfig_DeviceID = 'Please Select!';
 function Get_trackingHistoryMapConfig_dateFromFormated() {
 
        return _trackingHistoryMapConfig_dateFromFormated;

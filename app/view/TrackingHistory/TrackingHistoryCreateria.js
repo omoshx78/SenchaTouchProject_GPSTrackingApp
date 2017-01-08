@@ -125,14 +125,40 @@ xtype:'spacer'
       //  iconCls: 'home',
       // html: '<div ><img src="resources/icons/hideGeofence.png" width="33" height="23" alt="Company Name"></div>',
       ui: 'decline',
-      handler: function (button) {
-
-      
+      handler: function () {
 
 
+          var txttimeto;
+          var txttimefrom;
+          txttimeto= Ext.getCmp('txttimeto').getValue();
+          txttimefrom = Ext.getCmp('txttimefrom').getValue();
+          var n_txttimeto = txttimeto.length;
+          var n_txttimefrom = txttimefrom.length;
+          if (_trackingHistoryMapConfig_creteria == 'no') {
+              Ext.Msg.alert("Please Completed the search criteria !");
 
-          Ext.getCmp('mainView').setActiveItem(11);
-          plotingHistoryXypath();
+          } else {
+              Ext.getCmp('mainView').setActiveItem(11);
+              plotingHistoryXypath();
+          }
+
+
+
+          if (_trackingHistoryMapConfig_creteria == 'User Defined')
+          {
+              if (n_txttimeto.length <= 0 || n_txttimefrom.length <= 0) {
+                  Ext.Msg.alert("Please Completed time range!");
+              }else
+              {
+                  Ext.getCmp('mainView').setActiveItem(11);
+                  plotingHistoryXypath();
+              }
+              return;
+          }
+          
+          
+         
+         
       }
 
 
@@ -207,8 +233,9 @@ xtype:'spacer'
                             var str = Ext.getCmp('selectfieldTrackingHistoryCreateriaID').getValue()
                             var str_array = str.split(',');
                             _trackingHistoryMapConfig_trackID = str_array[0];
-                            _trackingHistoryMapConfig_DeviceID = str_array[1];
-                           
+                            _trackingHistoryMapConfig_DeviceID = str_array[1];                           
+                            _trackingHistoryMapConfig_trackItem = str_array[2];
+                            console.log(_trackingHistoryMapConfig_trackItem);
                           
                             }
 
@@ -435,10 +462,11 @@ xtype:'spacer'
                                               {
                                                   xtype: 'button',
                                                   text: 'Time',
-                                                  ui: 'confirm',
+                                                  ui: 'plain',
                                                   width: 45,
-                                                  height: 35,
-                                                  margin:'5 0 0 0',
+                                                  height: 40,
+                                                  html: '<div ><img src="resources/icons/TrackingMapHistory_FromToTimes.png" width="35" height="30" alt="Company Name"></div>',
+                                                  margin:'3 0 0 0',
                                                   id:'TrackingHistoryCreateriaFromTime',
                                                 
                                                   handler: function () {
@@ -633,10 +661,13 @@ xtype:'spacer'
                                      {
                                          xtype: 'button',
                                          text: 'Time',
-                                         ui: 'confirm',
+                                      //   ui: 'confirm',
+                                         ui: 'plain',
                                          width: 45,
-                                         height: 35,
-                                         margin: '5 0 0 0',
+                                         height: 40,
+
+                                         html: '<div ><img src="resources/icons/TrackingMapHistory_FromToTimes.png" width="35" height="30" alt="Company Name"></div>',
+                                         margin: '3 0 0 0',
                                          id: 'TrackingHistoryCreateriaToTime',
 
                                          handler: function () {

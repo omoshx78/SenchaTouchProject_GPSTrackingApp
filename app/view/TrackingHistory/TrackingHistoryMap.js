@@ -92,6 +92,7 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                             handler: function () {
                                 Ext.getCmp('mainView').setActiveItem(1);
                                 SetTrackingHistoryMapInfoPanelHide();
+                                TrackingHistoryMapPlayTrackedPanelHide();
                                 if (isrecenter == '1') {
                                     resetMap();
                                 }
@@ -161,7 +162,8 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                        id: 'backButtonHistoryMap',
                        text: 'Back',
                        handler: function () {
-                           //   _valuepanelhistoryPlay.hide();
+                           SetTrackingHistoryMapInfoPanelHide();
+                           TrackingHistoryMapPlayTrackedPanelHide();
                            Ext.getCmp('mainView').setActiveItem(5);
                            if (isrecenter == '1') {
                                resetMap();
@@ -263,7 +265,7 @@ function plotingHistoryXypath() {
         Ext.StoreMgr.get('TrackingHistoryMapStore').load();
         var myStoreHH = Ext.getStore('TrackingHistoryMapStore');
         var co = myStoreHH.getCount();
-        _trackingHistoryMapConfig_trackItem = '';
+     
         var ii = 0;
         Xarr.length = 0;
         Yarr.length = 0;
@@ -273,9 +275,8 @@ function plotingHistoryXypath() {
         if (co > 1) {
             pointCount = co;
             _trackingHistoryMapConfig_pointCount = co;
-            var modelRecordHHH = myStoreHH.getAt(0);
-            _trackingHistoryMapConfig_trackItem = modelRecordHHH.get('TrackItem');
-            _trackingHistoryMapConfig_trackID = modelRecordHHH.get('TrackID');
+         //   var modelRecordHHH = myStoreHH.getAt(0);
+         
 
             console.log("first:" + pointCount);
             for (ii = 0; ii < co; ii++) {
@@ -390,13 +391,14 @@ function drawlinexypathhistory(XYhistoryPath) {
         petahistory.fitBounds(bounds);
         travellengthkm = travellength / 1000;
         _trackingHistoryMapConfig_travellengthkm = travellengthkm.toFixed(1) + " KM";
-  
+        SetTrackingHistoryMapInfoPanelShow();
+        SetTrackingHistoryMapInfoPanelDetails();
 
-
+        firstime = '1';
       
       //  Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travellengthkm.toFixed(1) + " KM" + "| Point:" + pointCount + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
     }, 1000);
-
+   
 
 }
 
@@ -508,7 +510,7 @@ function loopingXY(number) {
 
         ttpoint = Xarr.length - 1
         //  alert(XYinit);
-        Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">Calculating..</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
+      //  Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">Calculating..</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
         if (markersArray) {
             for (i in markersArray) {
                 markersArray[i].setMap(null);
@@ -546,7 +548,7 @@ function loopingXY(number) {
 
     var p1 = new google.maps.LatLng(Yarr[0], Xarr[0]);
     var p2 = new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]);
-
+    //_trackingHistoryMapConfig_travellengthkm = calcDistance(p1, p2);
     //alert(calcDistance(p1, p2));
     //var fres
     //  alert(XYinit + " ------ " + restXY);
@@ -563,8 +565,9 @@ function loopingXY(number) {
     // var travellength = parseInt(polyLengthInMeters);
     //  travellength = +Math.floor(polyLengthInMeters);
 
+    SetTrackingHistoryMapInfoPanelDetailsPlay(calcDistance(p1, p2));
 
-    Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + calcDistance(p1, p2) + " KM | Total Point:" + ttpoint + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
+//// Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + calcDistance(p1, p2) + " KM | Total Point:" + ttpoint + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
 
 
     //  _valuepanelStatusPlay.hide();
@@ -574,7 +577,12 @@ function loopingXY(number) {
 
     var dtt = DTarr[rnumber].replace(/(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}/g, '');
     markersArray.push(marker);
-    Ext.getCmp('Playtrackedhistory').setHtml('<table>  <tr> <td colspan="2" font-weight: bold; style="background-color: #57A0DC;  font-size: 26px; color: #fff; text-align: center;">' + rnumber + '</td> </tr> <tr > <td colspan="2" style="background-color: #57A0DC;  font-size: 10px; color: #fff; text-align: center;   font-weight: bold;">' + Spdarr[rnumber] + 'km/h</td> </tr> <tr> <td colspan="2" style="background-color: #57A0DC; font-weight: bold; font-size: 10px; color: #fff; text-align: center;  ">' + dtt + '</td> </tr>  </table>');
+    Ext.getCmp('Playtrackedhistory').setHtml('<table>  <tr> <td colspan="2" font-weight: bold; style="background-color: #57A0DC;  font-size: 28px; color: #fff; text-align: center;"><b>' + rnumber + '</b></td> </tr> <tr > <td colspan="2" style="background-color: #57A0DC;  font-size: 12px; color: #fff; text-align: center;   font-weight: bold;"><b>' + Spdarr[rnumber] + 'km/h</b></td> </tr> <tr> <td colspan="2" style="background-color: #57A0DC; font-weight: bold; font-size: 12px; color: #fff; text-align: center;  "><b>' + dtt + '</b></td> </tr>  </table>');
+   // html:                                    '<table>  <tr> <td colspan="2" font-weight: bold; style="background-color: #57A0DC;  font-size: 15px; color: #fff; text-align: center;">1</td> </tr><tr> <td colspan="2" style="background-color: #57A0DC;  font-size: 10px; color: #fff; text-align: center;">Point</td> </tr>    <tr > <td colspan="2" style="background-color: #57A0DC;  font-size: 10px; color: #fff; text-align: center;   font-weight: bold;">80km/h</td> </tr> <tr> <td colspan="2" style="background-color: #57A0DC; font-weight: bold; font-size: 10px; color: #fff; text-align: center;  ">10:02:06 AM</td> </tr>  </table>',
+
+
+
+
     //   Ext.getCmp('Playtrackedhistory').setHtml('<table>  <tr> <td colspan="3" rowspan="2" font-weight: bold; style="background-color: red;  font-size: 25px; color: #fff; text-align: center;">' + rnumber + '</td> </tr>  <tr > <td colspan="3" style="background-color: red;  font-size: 15px; color: #fff; text-align: center;   font-weight: bold;">' + Spdarr[rnumber] + 'km/h</td> </tr> <tr> <td colspan="3" style="background-color: red; font-weight: bold; font-size: 15px; color: #fff; text-align: center;  ">' + dtt + '</td> </tr>  </table>');
     google.maps.event.addListener(marker, 'mousedown', (function (marker, rnumber) {
 
@@ -644,7 +652,9 @@ function loopingXY(number) {
                     polyLengthInMeters = google.maps.geometry.spherical.computeLength(flightPath.getPath().getArray());
                     // var travellength = parseInt(polyLengthInMeters);
                     travellength = +Math.floor(polyLengthInMeters);
-                    Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travellengthkm.toFixed(1) + " KM | Total Point:" + ttpoint + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
+
+                //    SetTrackingHistoryMapInfoPanelDetailsPlay(travellengthkm.toFixed(1));
+                  //  Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travellengthkm.toFixed(1) + " KM | Total Point:" + ttpoint + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
                     firstime = '1';
                     resumeCounter = 0;
                     counter = 0;

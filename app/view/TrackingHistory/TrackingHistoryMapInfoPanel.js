@@ -96,12 +96,13 @@ function TrackingHistoryMapInfoPanel()
                     //ui:'round'
                     ui: 'plain',
                     handler: function (btn) {
-                        if (!this.overlay) {
-                            this.overlay = Ext.Viewport.add(_valuepanelhistoryPlay
-                        );
+                        //if (!this.overlay) {
+                        //    this.overlay = Ext.Viewport.add(_valuepanelhistoryPlay
+                        //);
 
-                        }
-                        this.overlay.show();
+                        //}
+                        //this.overlay.show();
+                        TrackingHistoryMapPlayTrackedPanelShow();
 
                         btnplay = btn;
                         //  btn.setHtml('<div ><img src="resources/icons/pausehistory.png" width="40" height="40" alt="Company Name"></div>');
@@ -149,6 +150,7 @@ function TrackingHistoryMapInfoPanel()
                     ui: 'plain',
                     handler: function () {
                         SetTrackingHistoryMapInfoPanelHide();
+                        TrackingHistoryMapPlayTrackedPanelHide();
                         //_valuepanelhistoryPlay.hide();
                         //_valuepanelhistoryinfo.hide();
                     }
@@ -179,10 +181,43 @@ function SetTrackingHistoryMapInfoPanelShow() {
 }
 
 function SetTrackingHistoryMapInfoPanelHide() {
+  //  Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  N/A </u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel"> TODAY :' + now + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel"> N/A </td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel"> N/A | Point: N/A  </td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel"> N/A </td></tr></table>');
     _trackingHistoryMapInfoPanel.hide();
 }
 
 function SetTrackingHistoryMapInfoPanelDetails()
 {
-    Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeFrom() + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeTo() + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_travellengthkm() + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+
+    var now = new Date().toLocaleTimeString(); 
+    var today = new Date();
+    today.setHours(today.getHours() - 1);
+    var lateOneHour = today.toLocaleTimeString();
+
+  
+
+    if (_trackingHistoryMapConfig_creteria == 'User Defined') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeFrom() + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeTo() + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_travellengthkm() + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    } else if (_trackingHistoryMapConfig_creteria == 'Today') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel"> TODAY : 00:00</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">TODAY : '+ now +'</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_travellengthkm() + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    } else if (_trackingHistoryMapConfig_creteria == 'Yesterday') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel"> YESTERDAY : 00:00</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">YESTERDAY : 23:59</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_travellengthkm() + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    } else if (_trackingHistoryMapConfig_creteria == 'Hour ago') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel"> TODAY :' + now + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">TODAY(late 1 hour) : ' + lateOneHour + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_travellengthkm() + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    }
+   // Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeFrom() + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeTo() + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_travellengthkm() + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+}
+
+
+function SetTrackingHistoryMapInfoPanelDetailsPlay(travelKM)
+{
+    if (_trackingHistoryMapConfig_creteria == 'User Defined') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeFrom() + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_dateFromFormated() + '  ' + Get_trackingHistoryMapConfig_timeTo() + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travelKM + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    } else if (_trackingHistoryMapConfig_creteria == 'Today') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel"> TODAY : 00:00</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">TODAY : ' + now + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travelKM + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    } else if (_trackingHistoryMapConfig_creteria == 'Yesterday') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel"> YESTERDAY : 00:00</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">YESTERDAY : 23:59</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travelKM + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    } else if (_trackingHistoryMapConfig_creteria == 'Hour ago') {
+        Ext.getCmp('TrackingHistoryMapInfoPanelDetails').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Get_trackingHistoryMapConfig_trackID() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel"> TODAY :' + now + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">TODAY(late 1 hour) : ' + lateOneHour + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travelKM + " KM" + "| Point:" + Get_trackingHistoryMapConfig_pointCount() + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + Get_trackingHistoryMapConfig_trackItem() + '</td></tr></table>');
+    }
+
 }
