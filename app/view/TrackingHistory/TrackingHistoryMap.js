@@ -84,7 +84,7 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                         {
                             xtype: 'button',
 
-                            id: 'btnHistoryMappHome',
+                            id: 'btnHistoryMapHome',
                             //  text: 'Show',
                             iconCls: 'home',
                             // html: '<div ><img src="resources/icons/hideGeofence.png" width="33" height="23" alt="Company Name"></div>',
@@ -102,6 +102,23 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
 
 
                         },
+                          {
+                              xtype: 'spacer'
+                          },
+                           {
+                               xtype: 'button',
+                               //right: -7,
+                               //top: 1,
+                               id: 'btnHistoryMapTopAccInfo',
+                               html: '<div ><img src="resources/icons/MainMenuPictureProfile.png" width="45" height="45" alt="Company Name"></div>',
+                               //  html: '<div ><img src="resources/icons/hideGeofence.png" width="30" height="20" alt="Company Name"></div>',
+                               ui: 'plain',
+                               handler: function () {
+
+
+
+                               }
+                           },
 
 
 
@@ -220,8 +237,11 @@ var Xarr = [];
 var Yarr = [];
 var Spdarr = [];
 var DTarr = [];
+var Directionarr = [];
 var xyHistory = [];
 var markersArray = [];
+var markersStartPointArray = [];
+var markersLastPointArray = [];
 var flightPath;
 
 var polyLengthInMeters;
@@ -275,7 +295,9 @@ function plotingHistoryXypath() {
         Yarr.length = 0;
         Spdarr.length = 0;
         DTarr.length = 0;
+        Directionarr.length = 0;
         pathXY = "";
+       
         if (co > 1) {
             pointCount = co;
             _trackingHistoryMapConfig_pointCount = co;
@@ -288,49 +310,126 @@ function plotingHistoryXypath() {
                 Xarr[ii] = modelRecordHH.get('Longitude');
                 Yarr[ii] = modelRecordHH.get('Latitude');
                 Spdarr[ii] = modelRecordHH.get('Speed');
-                DTarr[ii] = modelRecordHH.get('DateDT');              
+                DTarr[ii] = modelRecordHH.get('DateDT');
+                Directionarr[ii] = modelRecordHH.get('Direction');
                 pathXY += "[" + LatitudeHH + "," + LongitudeHH + ",'" + SpeedHH+"'],";
 
 
             }
            
             isrecenter = '1';
-            Ext.Viewport.unmask();
-
-
-            Ext.Viewport.mask({ xtype: 'loadmask', message: 'Ploting Start Point....' });
-            var task = Ext.create('Ext.util.DelayedTask', function () {
-            markerFirstPoint(Xarr[0], Yarr[0], Spdarr[0], DTarr[0]);
-            Ext.Viewport.unmask();
-            });
-            task.delay(1000);
 
 
 
-            Ext.Viewport.mask({ xtype: 'loadmask', message: 'Ploting End Point....' });
-            var task = Ext.create('Ext.util.DelayedTask', function () {
-                markerLastPoint(Xarr[ii - 1], Yarr[ii - 1], Spdarr[ii - 1], DTarr[ii - 1]);
-                Ext.Viewport.unmask();
-            });
-            task.delay(1000);
-       
+            setTimeout(function () {
 
-            Ext.Viewport.mask({ xtype: 'loadmask', message: 'Drawing Route Path....' });
-            var task = Ext.create('Ext.util.DelayedTask', function () {
-                   drawlinexypathhistory(pathXY);
-                Ext.Viewport.unmask();
-            });
-            task.delay(1000);
+
+                try {
+
+                    Ext.Viewport.mask({ xtype: 'loadmask', message: 'Ploting Start Point....' });
+                    var task = Ext.create('Ext.util.DelayedTask', function () {
+
+
+
+
+                        markerFirstPoint(Xarr[0], Yarr[0], Spdarr[0], DTarr[0]);
+                        Ext.Viewport.unmask();
+
+
+                        setTimeout(function () {
+
+
+                            try {
+                                Ext.Viewport.mask({ xtype: 'loadmask', message: 'Ploting End Point....' });
+                                var task = Ext.create('Ext.util.DelayedTask', function () {
+
+                                    markerLastPoint(Xarr[ii - 1], Yarr[ii - 1], Spdarr[ii - 1], DTarr[ii - 1]);
+                                    Ext.Viewport.unmask();
+
+                                    setTimeout(function () {
+
+
+                                        Ext.Viewport.mask({ xtype: 'loadmask', message: 'Drawing Route Path....' });
+                                        var task = Ext.create('Ext.util.DelayedTask', function () {
+                                            drawlinexypathhistory(pathXY);
+                                            Ext.Viewport.unmask();
+
+                                        });
+                                        task.delay(1000);
+                                        try {
+
+
+
+                                } catch (err) {
+                                //console.log(err);
+                            }
+                        }, 500);
+
+                                });
+                                task.delay(1000);
+                            } catch (err) {
+                                //console.log(err);
+                            }
+                        }, 500);
+
+
+                      
+
+                    });
+                    task.delay(1000);
+                } catch (err) {
+                    //console.log(err);
+                }
+
+
+               
+
+
+
+
+            }, 500);
+
+
+
+
+
         
+
+      
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+     
+      
+       
         } else {
+            SetTrackingHistoryMapInfoPanelShow();
+            SetTrackingHistoryMapInfoPanelDetails();
+            TrackingHistoryMapPlayTrackedPanelShow();
+            TrackingHistoryMapTravelRangePanelShow();
             isrecenter = '0';
             Ext.Msg.alert("No Signal Point Detected.!!");
-           
+            Ext.Viewport.unmask();
         }
 
-    
+        Ext.Viewport.unmask();
 
     });
+
     task.delay(2000);
 
 }
@@ -356,10 +455,16 @@ function markerFirstPoint(Long,Lat,Speed,DT)
     bounds.extend(point);
 
     var image = {
-        url: ip + 'FirstPoint.png', // url
-        scaledSize: new google.maps.Size(80, 80), // scaled size
-        //  origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(40, 40) // anchor
+        url: ip + 'FirstPoint1.png', // url
+        scaledSize: new google.maps.Size(60, 80), // scaled size
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(30, 80) // anchor
+
+
+
+        
+          // The anchor for this image is the base of the flagpole at (0, 32).
+      //  anchor: new google.maps.Point(0, 32)
     };
 
 
@@ -371,7 +476,10 @@ function markerFirstPoint(Long,Lat,Speed,DT)
         map: petahistory
   });
   petahistory.fitBounds(bounds);
-  markersArray.push(markerFisrt);
+    // markersArray.push(markerFisrt);
+
+  markersStartPointArray.push(markerFisrt);
+ 
   google.maps.event.addListener(markerFisrt, 'mousedown', (function (markerFisrt, i) {
 
 
@@ -398,10 +506,10 @@ function markerLastPoint(Long, Lat, Speed, DT) {
     bounds.extend(point);
 
    var image = {
-       url: ip + 'LastPoint.png', // url
-        scaledSize: new google.maps.Size(80, 80), // scaled size
-        //  origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(40, 40) // anchor
+       url: ip + 'LastPoint1.png', // url
+       scaledSize: new google.maps.Size(60, 80), // scaled size
+       origin: new google.maps.Point(0, 0),
+       anchor: new google.maps.Point(30, 80) // anchor
     };
 
 
@@ -413,7 +521,9 @@ function markerLastPoint(Long, Lat, Speed, DT) {
         map: petahistory
     });
     petahistory.fitBounds(bounds);
-    markersArray.push(markerLast);
+    // markersArray.push(markerLast);
+
+     markersLastPointArray.push(markerLast);
     google.maps.event.addListener(markerLast, 'mousedown', (function (markerLast, i) {
 
 
@@ -438,7 +548,7 @@ function drawlinexypathhistory(XYhistoryPath) {
 
     var locations = [];
   
-    setTimeout(function () {
+    //setTimeout(function () {
 
 
 
@@ -503,7 +613,7 @@ function drawlinexypathhistory(XYhistoryPath) {
 
         petahistory.fitBounds(bounds);
         travellengthkm = travellength / 1000;
-        _trackingHistoryMapConfig_travellengthkm = travellengthkm.toFixed(1) + " KM";
+        _trackingHistoryMapConfig_travellengthkm = travellengthkm.toFixed(1);
         SetTrackingHistoryMapInfoPanelShow();
         SetTrackingHistoryMapInfoPanelDetails();
         TrackingHistoryMapPlayTrackedPanelShow();
@@ -511,7 +621,7 @@ function drawlinexypathhistory(XYhistoryPath) {
         firstime = '1';
       
       //  Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + travellengthkm.toFixed(1) + " KM" + "| Point:" + pointCount + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
-    }, 1000);
+    //}, 1000);
    
 
 }
@@ -613,6 +723,7 @@ function calcDistance(p1, p2) {
 
 var flightPlanCoordinatess = new Array();
 var ttpoint;
+var playMarker;
 //var XYinit;
 function loopingXY(number) {
     console.log(number);
@@ -644,16 +755,77 @@ function loopingXY(number) {
     //var point = new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]);
     //bounds.extend(point);
     //  console.log(locations[i][0], locations[i][1]);
-    marker = new google.maps.Marker({
-        //    position: new google.maps.LatLng(locations[i][0], locations[i][1]),
-        position: new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]),
-        // animation: google.maps.Animation.DROP,
-        //icon: imagie,
-        map: petahistory
-    });
+  
+    console.log(Get_trackingHistoryMapConfig_trackingItemType());
+    if (Get_trackingHistoryMapConfig_trackingItemType() == 'Human') {
+
+       var images = {
+            url: ip + '7.gif', // url
+            scaledSize: new google.maps.Size(80, 80), // scaled size
+            //  origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point(40, 40) // anchor
+        };
 
 
-    //NEW
+
+
+
+
+         playMarker = new google.maps.Marker({
+            //    position: new google.maps.LatLng(locations[i][0], locations[i][1]),
+            position: new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]),
+            icon: images,
+            flat: true,
+             // labelAnchor: new google.maps.Point(20, 27),
+
+            draggable: false,
+            optimized: false,
+          
+            map: petahistory
+        });
+        markersArray.push(playMarker);
+    } else 
+    {
+
+        var playDirection = parseFloat(Directionarr[rnumber]);
+     
+        playMarker = new MarkerWithLabel({
+          position: new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]),
+            //  icon: image,
+            flat: true,
+            icon: {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                scale: 10,
+                // rotation: 16.86,
+                rotation: playDirection,
+                // rotation: 0.0,
+                // strokeColor: '#F6358A',
+                strokeColor: '#FFFFFF',
+                fillColor: '#57A0DC',
+                fillOpacity: 1,
+                strokeWeight: 4
+            },
+            //  optimized: false,
+            //  icon: image,
+            draggable: false,
+            //labelStyle: { opacity: 0.75 },
+            // labelContent: "<div style=background-color:Black;width:auto;border:2px solid white;padding:15px;><font size=3 color=white>" + trackingItems + "</font></div>",
+            labelContent: Get_trackingHistoryMapConfig_trackID(),
+            labelAnchor: new google.maps.Point(70, 13),
+            labelClass: "labelsMark",// the CSS class for the label
+            map: petahistory
+           
+        });
+
+    }
+ 
+ 
+      
+    
+
+
+
+ // markers.push(playMarker);
 
 
     //var XYinit = new google.maps.LatLng(Yarr[0], Xarr[0]);
@@ -691,7 +863,7 @@ function loopingXY(number) {
 
 
     var dtt = DTarr[rnumber].replace(/(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}/g, '');
-    markersArray.push(marker);
+   
     Ext.getCmp('Playtrackedhistory').setHtml('<table>  <tr> <td colspan="2" font-weight: bold; style="background-color: #57A0DC;  font-size: 28px; color: #fff; text-align: center;"><b>' + rnumber + '</b></td> </tr> <tr > <td colspan="2" style="background-color: #57A0DC;  font-size: 12px; color: #fff; text-align: center;   font-weight: bold;"><b>' + Spdarr[rnumber] + 'km/h</b></td> </tr> <tr> <td colspan="2" style="background-color: #57A0DC; font-weight: bold; font-size: 12px; color: #fff; text-align: center;  "><b>' + dtt + '</b></td> </tr>  </table>');
    // html:                                    '<table>  <tr> <td colspan="2" font-weight: bold; style="background-color: #57A0DC;  font-size: 15px; color: #fff; text-align: center;">1</td> </tr><tr> <td colspan="2" style="background-color: #57A0DC;  font-size: 10px; color: #fff; text-align: center;">Point</td> </tr>    <tr > <td colspan="2" style="background-color: #57A0DC;  font-size: 10px; color: #fff; text-align: center;   font-weight: bold;">80km/h</td> </tr> <tr> <td colspan="2" style="background-color: #57A0DC; font-weight: bold; font-size: 10px; color: #fff; text-align: center;  ">10:02:06 AM</td> </tr>  </table>',
 
@@ -699,7 +871,7 @@ function loopingXY(number) {
 
 
     //   Ext.getCmp('Playtrackedhistory').setHtml('<table>  <tr> <td colspan="3" rowspan="2" font-weight: bold; style="background-color: red;  font-size: 25px; color: #fff; text-align: center;">' + rnumber + '</td> </tr>  <tr > <td colspan="3" style="background-color: red;  font-size: 15px; color: #fff; text-align: center;   font-weight: bold;">' + Spdarr[rnumber] + 'km/h</td> </tr> <tr> <td colspan="3" style="background-color: red; font-weight: bold; font-size: 15px; color: #fff; text-align: center;  ">' + dtt + '</td> </tr>  </table>');
-    google.maps.event.addListener(marker, 'mousedown', (function (marker, rnumber) {
+    google.maps.event.addListener(playMarker, 'mousedown', (function (playMarker, rnumber) {
 
 
         return function () {
@@ -708,19 +880,39 @@ function loopingXY(number) {
 
 
             infowindow.setContent("<font color=red>Signal seq:<b>" + rnumber + "</b><br> Speed :<b>" + Spdarr[rnumber] + "km/h</b><br> Time :<b>" + dt + "</b></font>");
-            infowindow.open(petahistory, marker);
+            infowindow.open(petahistory, playMarker);
         }
     })
-(marker, rnumber));
+(playMarker, rnumber));
+
+
+    // TrackingHistoryMap_DeleteMarker(playMarker.id);
+
+
+    setTimeout(function () {
+
+
+        try {
+
+            playMarker.setMap(null);
+
+        } catch (err) {
+            console.log(err);
+        }
+    }, 1000);
 
 
 
+    if (number == pointCount) {
+     
+        Ext.Msg.alert("Done!");
+        firstime = '1';
+        resumeCounter = 0;
+        counter = 0;
+        btnplay.setHtml('<div ><img src="resources/icons/playhistory.png" width="40" height="40" alt="Company Name"></div>');
+        clearTimeout(myVar);
 
-    //////////////////////////////if (number == pointCount) {
-
-
-
-    //////////////////////////////}
+    }
   
 
 
@@ -736,6 +928,23 @@ function loopingXY(number) {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -768,6 +977,34 @@ function resetMap() {
         }
         markersArray.length = 0;
     }
+
+
+
+    if (markersStartPointArray) {
+        for (i in markersStartPointArray) {
+            markersStartPointArray[i].setMap(null);
+        }
+        markersStartPointArray.length = 0;
+    }
+
+
+    if (markersLastPointArray) {
+        for (i in markersLastPointArray) {
+            markersLastPointArray[i].setMap(null);
+        }
+        markersLastPointArray.length = 0;
+    }
+
+   
+
+
+
+
+
+
+
+
+
     if (lineXYpath) {
         for (i in lineXYpath) {
             lineXYpath[i].setMap(null);
@@ -806,7 +1043,7 @@ var btnplay;
 var firstime;
 var isfirstime = 'yes';
 var plystatus = 'play';
-
+var myVar;
 
 function resumeWatchclockPlay() {
     var maxLoops = Xarr.length;

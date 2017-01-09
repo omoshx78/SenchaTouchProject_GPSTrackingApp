@@ -84,7 +84,7 @@ function TrackingHistoryMapInfoPanel()
                 {
                     xtype: 'button',
 
-                    Id: 'playTrackhistorylbl',
+                    id: 'playTrackhistorylbl',
                     //   hidden:true,
                     // margin: 'top left bottom right',
                     margin: '-40 0 0 0',
