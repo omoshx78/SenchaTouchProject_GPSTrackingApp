@@ -94,6 +94,7 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                                 SetTrackingHistoryMapInfoPanelHide();
                                 TrackingHistoryMapPlayTrackedPanelHide();
                                 TrackingHistoryMapTravelRangePanelHide();
+                                StopPlayMarker();
                                 if (isrecenter == '1') {
                                     resetMap();
                                 }
@@ -186,6 +187,7 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                            TrackingHistoryMapPlayTrackedPanelHide();
                            TrackingHistoryMapTravelRangePanelHide();
                            Ext.getCmp('mainView').setActiveItem(5);
+                           StopPlayMarker();
                            if (isrecenter == '1') {
                                resetMap();
                            }
@@ -904,13 +906,14 @@ function loopingXY(number) {
 
 
     if (number == pointCount) {
-     
+        clearTimeout(myVar);
+        plystatus = 'stop';
         Ext.Msg.alert("Done!");
         firstime = '1';
         resumeCounter = 0;
         counter = 0;
         btnplay.setHtml('<div ><img src="resources/icons/playhistory.png" width="40" height="40" alt="Company Name"></div>');
-        clearTimeout(myVar);
+       
 
     }
   
@@ -1043,7 +1046,7 @@ var btnplay;
 var firstime;
 var isfirstime = 'yes';
 var plystatus = 'play';
-var myVar;
+
 
 function resumeWatchclockPlay() {
     var maxLoops = Xarr.length;
@@ -1059,6 +1062,8 @@ function resumeWatchclockPlay() {
                 //current.getEl().fadeOut({ duration: 2000 });
                 //current = current == one ? two : one;
                 //current.getEl().fadeIn({ duration: 2000 });
+                console.log(plystatus);
+                console.log(counter);
                 loopingXY(counter);
                 next();
             }
