@@ -726,6 +726,11 @@ function calcDistance(p1, p2) {
 var flightPlanCoordinatess = new Array();
 var ttpoint;
 var playMarker;
+var MeasureCoordinates = new Array();
+var CoordinateLengthInMeter;
+var Coordinatetravellength;
+var Coordinatepoint;
+var Coordinatetravellengthkm;
 //var XYinit;
 function loopingXY(number) {
     console.log(number);
@@ -757,7 +762,26 @@ function loopingXY(number) {
     //var point = new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]);
     //bounds.extend(point);
     //  console.log(locations[i][0], locations[i][1]);
+
+
+     Coordinatepoint = new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]);
+
+    MeasureCoordinates.push(Coordinatepoint);
+    var CoordinatePath = new google.maps.Polyline({
+        path: MeasureCoordinates,
+        geodesic: true,
+      
+    });
   
+    CoordinateLengthInMeter = google.maps.geometry.spherical.computeLength(CoordinatePath.getPath().getArray());
+    Coordinatetravellength = +Math.floor(CoordinateLengthInMeter);
+    Coordinatetravellengthkm = Coordinatetravellength / 1000;
+
+  
+
+    var travelKM = Coordinatetravellengthkm.toFixed(2);
+    SetTTrackingHistoryMapTravelRangePanel(travelKM);
+
     console.log(Get_trackingHistoryMapConfig_trackingItemType());
     if (Get_trackingHistoryMapConfig_trackingItemType() == 'Human') {
 
@@ -823,45 +847,7 @@ function loopingXY(number) {
  
  
       
-    
 
-
-
- // markers.push(playMarker);
-
-
-    //var XYinit = new google.maps.LatLng(Yarr[0], Xarr[0]);
-
-    //var restXY= new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]);
-
-
-    var p1 = new google.maps.LatLng(Yarr[0], Xarr[0]);
-    var p2 = new google.maps.LatLng(Yarr[rnumber], Xarr[rnumber]);
-    //_trackingHistoryMapConfig_travellengthkm = calcDistance(p1, p2);
-    //alert(calcDistance(p1, p2));
-    //var fres
-    //  alert(XYinit + " ------ " + restXY);
-    //alert();
-    //console.log(XYinit);
-    //console.log(restXY);
-
-
-
-    //var calculateR = google.maps.geometry.spherical.computeDistanceBetween((XYinit, restXY) / 1000).toFixed(2);
-    //alert(calculateR);
-
-    //  polyLengthInMeters = google.maps.geometry.spherical.computeLength(flightPaths.getPath().getArray());
-    // var travellength = parseInt(polyLengthInMeters);
-    //  travellength = +Math.floor(polyLengthInMeters);
-
-    SetTrackingHistoryMapInfoPanelDetailsPlay(calcDistance(p1, p2));
-    SetTTrackingHistoryMapTravelRangePanel(calcDistance(p1, p2));
-//// Ext.getCmp('Infotrackedhistory').setHtml('<table class="tblheadetrackedhistory"><tr > <td class="tdgpsdatahistory"><u>Tracking ID :  ' + Ext.getCmp('HistoryTrackingID').getValue() + '</u></td></tr></table>                           <br>   <table class="tblmasterhistory"> <tr> <td class="tdgpslabel">Date From</td> <td class="tdgpslabel">' + dateFromFormated + '  ' + timeFrom + '</td></tr><tr> <td class="tdgpslabel">Date To</td> <td class="tdgpslabel">' + dateToFormated + '  ' + timeTo + '</td></tr><tr> <td class="tdgpslabel">Travel range(KM)</td> <td class="tdgpslabel">' + calcDistance(p1, p2) + " KM | Total Point:" + ttpoint + '</td></tr><tr> <td class="tdgpslabel">Tracking Item</td> <td class="tdgpslabel">' + TrackItem + '</td></tr></table>');
-
-
-    //  _valuepanelStatusPlay.hide();
-
-    //
 
 
     var dtt = DTarr[rnumber].replace(/(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}/g, '');
