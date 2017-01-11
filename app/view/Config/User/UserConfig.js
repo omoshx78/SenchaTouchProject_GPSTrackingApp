@@ -2,6 +2,7 @@
 
 });
 
+var _IsSuccessLogin = false;
 
 function GetCurrentUserID() {
 
@@ -31,6 +32,19 @@ function GetCurrentUserAccountNo() {
     var store = _DataStore_User_Login.getAt(0);
     if (store != null) {
         _value = store.get('AccountNo');
+    }
+    return _value;
+}
+
+
+
+function GetCurrentUserPd() {
+
+    var _value = '';
+    //_DataStore_Maintain_GetByMPI.load();
+    var store = _DataStore_User_Login.getAt(0);
+    if (store != null) {
+        _value = store.get('Password');
     }
     return _value;
 }

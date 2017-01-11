@@ -58,6 +58,25 @@ namespace TrackingInfo.Controllers
             return Json(new { success = success, message = _Message, total = data.Count, results = data }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+
+        public JsonResult RegisteredAccount_LoadByAccNo(string AccountNo)
+        {
+            bool success = true;
+            string _Message = string.Empty;
+            List<RegisteredAccountModel> data = new List<RegisteredAccountModel>();
+            try
+            {
+                data = RegisteredAccountModel.RegisteredAccountLoadByAccNo(AccountNo);
+            }
+            catch (Exception ex)
+            {
+                _Message = ex.Message;
+                success = false;
+            }
+
+            return Json(new { success = success, message = _Message, total = data.Count, results = data }, JsonRequestBehavior.AllowGet);
+        }
 
 
         [HttpPost]

@@ -1,4 +1,5 @@
 ﻿var AAccountNo;
+
 Ext.define('MyGPS.view.Login', {
     extend: 'Ext.Container',
     xtype: 'loginpage',
@@ -217,12 +218,14 @@ Ext.define('MyGPS.view.Login', {
                                      Ext.getCmp('MainMenuUserLabel').setHtml('<font size="3" color="white">Welcome!<br>' + store.get('UserName') + '</font>');
                                      Ext.getCmp('mainView').setActiveItem(1);
                                      AAccountNo = GetCurrentUserAccountNo();
+                                     _IsSuccessLogin = true;
                                      Ext.Msg.alert("Login Success!");
                                  }
                              }
                              else {
 
                                  Ext.Msg.alert("Failed.!");
+                                 _IsSuccessLogin = false;
                              }
 
 

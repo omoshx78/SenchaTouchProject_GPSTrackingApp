@@ -269,7 +269,81 @@ namespace TrackingInfo.Models
 
         }
 
-  
+        public static List<RegisteredAccountModel> RegisteredAccountLoadByAccNo(string AccountNo)
+        {
+            List<RegisteredAccountModel> _Value = new List<RegisteredAccountModel>();
+            //SqlConnection _SQLConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DentalAppConn"].ConnectionString);
+            SqlConnection _SQLConnection = SQLConnectionString.BuildConnection();
+            using (SqlConnection _DBConnection = _SQLConnection)
+            {
+                SqlCommand _SQLCommand = new SqlCommand();
+                _SQLCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                _SQLCommand.CommandTimeout = 0;
+                using (_SQLCommand)
+                {
+                    try
+                    {
+                        _SQLCommand.Connection = _DBConnection;
+                        _SQLCommand.CommandText = "RegisteredAccount_LoadByAccNo";
+                        _SQLCommand.Parameters.AddWithValue("@AccountNo", AccountNo);
+                        //  _SQLCommand.Parameters.AddWithValue("@count", count);
+                        _DBConnection.Open();
+                        SqlDataReader _SQLDataReader = _SQLCommand.ExecuteReader();
+                        RegisteredAccountModel _result;
+                        while (_SQLDataReader.Read())
+                        {
+                            _result = new RegisteredAccountModel();
+                            _result.AccID = Convert.ToInt32(_SQLDataReader["AccID"].ToString());
+                            _result.AccountNo = _SQLDataReader["AccountNo"].ToString();
+                            _result.AccountName = _SQLDataReader["AccountName"].ToString();
+                            _result.AAddress = _SQLDataReader["AAddress"].ToString();
+                            _result.AMobilePhone = _SQLDataReader["AMobilePhone"].ToString();
+                            _result.AHousePhone = _SQLDataReader["AHousePhone"].ToString();
+                            _result.AOfficePhone = _SQLDataReader["AOfficePhone"].ToString();
+                            _result.AAlertPhone = _SQLDataReader["AAlertPhone"].ToString();
+                            _result.AEmail = _SQLDataReader["AEmail"].ToString();
+                            _result.AAlertEmail = _SQLDataReader["AAlertEmail"].ToString();
+                            _result.AVersion = _SQLDataReader["AVersion"].ToString();
+                            _result.ARegisteredDate = _SQLDataReader["ARegisteredDate"].ToString();
+                            _result.AExpiredDate = _SQLDataReader["AExpiredDate"].ToString();
+                            _result.ACreatedDate = _SQLDataReader["ACreatedDate"].ToString();
+                            _result.AModifiedDate = _SQLDataReader["AModifiedDate"].ToString();
+                            _result.ACreatedBy = _SQLDataReader["ACreatedBy"].ToString();
+                            _result.AModifiedBy = _SQLDataReader["AModifiedBy"].ToString();
+                            _result.AStatus = _SQLDataReader["AStatus"].ToString();
+                            _result.Alastlogin = _SQLDataReader["Alastlogin"].ToString();
+                            _result.AItemRegisterCount = _SQLDataReader["AItemRegisterCount"].ToString();
+                            _result.SMSAlertMsg = _SQLDataReader["SMSAlertMsg"].ToString();
+
+                            _Value.Add(_result);
+
+                        }
+
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        throw new Exception(ex.Message);
+
+                    }
+
+                    finally
+                    {
+
+                        _DBConnection.Close();
+
+                    }
+
+                }
+
+            }
+
+
+
+            return _Value;
+
+        }
 
         public static bool Account_InsertUpdate(string AccountNo, string AccountName, string AAddress, string AMobilePhone, string AHousePhone, string AOfficePhone, string AAlertPhone,
     string AEmail, string AAlertEmail, string AVersion, string ACreatedBy, string status, int AItemRegisterCount)

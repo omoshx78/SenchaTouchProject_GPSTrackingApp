@@ -1,4 +1,7 @@
-﻿Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryCreateria', {
+﻿
+var _trackingHistoryCreteriaSource;
+
+Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryCreateria', {
 
     extend: 'Ext.Container',
 
@@ -230,13 +233,26 @@ xtype:'spacer'
                     //}
                     listeners: {
                         change: function () {
-                            var str = Ext.getCmp('selectfieldTrackingHistoryCreateriaID').getValue()
-                            var str_array = str.split(',');
-                            _trackingHistoryMapConfig_trackID = str_array[0];
-                            _trackingHistoryMapConfig_DeviceID = str_array[1];                           
-                            _trackingHistoryMapConfig_trackItem = str_array[2];
-                            _trackingHistoryMapConfig_trackingItemType = str_array[3];
-                            console.log(_trackingHistoryMapConfig_trackingItemType);
+
+
+                            if (_trackingHistoryCreteriaSource == 'PointInfo')
+                            {
+
+                                return;
+                            }
+                            else
+                            {
+                                var str = Ext.getCmp('selectfieldTrackingHistoryCreateriaID').getValue()
+                                var str_array = str.split(',');
+                                _trackingHistoryMapConfig_trackID = str_array[0];
+                                _trackingHistoryMapConfig_DeviceID = str_array[1];
+                                _trackingHistoryMapConfig_trackItem = str_array[2];
+                                _trackingHistoryMapConfig_trackingItemType = str_array[3];
+                                console.log(_trackingHistoryMapConfig_trackingItemType);
+
+                            }
+
+                          
                           
                             }
 

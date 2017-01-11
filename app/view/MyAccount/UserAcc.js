@@ -7,6 +7,7 @@
 
 var btnstatus;
 var pwdsts;
+var tabActive;
 Ext.define('MyGPS.view.MyAccount.UserAcc', {
     extend: 'Ext.tab.Panel',
     xtype: 'UserAccount',
@@ -74,7 +75,23 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
 
 
                },
-             
+              {
+                  xtype: 'spacer'
+              },
+                           {
+                               xtype: 'button',
+                               //right: -7,
+                               //top: 1,
+                               id: 'btnMyAccountTopAccInfo',
+                               html: '<div ><img src="resources/icons/MainMenuPictureProfile.png" width="45" height="45" alt="Company Name"></div>',
+                               //  html: '<div ><img src="resources/icons/hideGeofence.png" width="30" height="20" alt="Company Name"></div>',
+                               ui: 'plain',
+                               handler: function () {
+
+
+
+                               }
+                           },
              
 
            ]
@@ -94,7 +111,31 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                   pack: 'end',
                   align: 'right',
               },
-              items:[
+              items: [
+
+
+
+                   {
+
+                       ui: 'action',
+                       xtype: 'button',
+                       id: 'BackMyAccountDetails',
+                       text: 'Back',
+
+                       // hidden:true,
+                       handler: function () {
+                           if(tabActive == 'AccInfo')
+                           {
+                               Ext.getCmp('mainView').setActiveItem(1);
+                           } if (tabActive == 'TrackingItems') {
+                               Ext.getCmp('basicform').setActiveItem(0);
+
+                           } if (tabActive == 'ResponderAlert') {
+                               Ext.getCmp('basicform').setActiveItem(1);
+                           }
+                        
+                       }
+                   },
               
                 {
                    
@@ -264,6 +305,9 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                         Ext.getCmp('ViewlastLocuseracc').setHidden(true);
                         Ext.getCmp('useraccStartlivetracking').setHidden(true);
                         Ext.getCmp('BackuserTracerDev').setHidden(true);
+                        if (_IsSuccessLogin)
+                            SetMyAccountDetailsByAccountNo();
+                        tabActive = 'AccInfo';
                     }
                    
                 },
@@ -291,6 +335,7 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                                xtype: 'textfield',
                                id: 'AccID',
                                label: 'ID',
+                               hidden: true,
                                disabled: true,
                                autoCapitalize: true,
                                //required: true,
@@ -469,7 +514,16 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                                                 //required: true,
                                                 clearIcon: true
                                             },
-                                                
+                                               {
+                                                   xtype: 'textfield',
+                                                   id: 'AccItemRegisterCount',
+                                                   label: 'Item Registered',
+                                                   //placeHolder: 'Tom Roy',
+                                                   disabled: true,
+                                                   autoCapitalize: true,
+                                                   //required: true,
+                                                   clearIcon: true
+                                               },
                                              
                                              //{
                                              //    xtype: 'button',
@@ -568,10 +622,17 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                                                      if (chkvalue) {
 
 
+
+
+
+
+
+
+                                                        // AVersion, ACreatedBy, status,
                                                          Ext.Viewport.mask({ xtype: 'loadmask', message: 'Saving...' });
                                                          var task = Ext.create('Ext.util.DelayedTask', function () {
                                                              InsertUpdateAccount(Ext.getCmp('AccNo').getValue(), Ext.getCmp('AccName').getValue(), Ext.getCmp('AccAddress').getValue(), Ext.getCmp('AccMobilePhone').getValue(), Ext.getCmp('AccHousePhone').getValue(), Ext.getCmp('AccOfficePhone').getValue(), Ext.getCmp('AccAlertPhone').getValue(),
-                                     Ext.getCmp('AccEmail').getValue(), Ext.getCmp('AccAlertEmail').getValue(), Ext.getCmp('AccVersionAdd').getValue(), UserName, Ext.getCmp('AccStatusAdd').getValue(), Ext.getCmp('AccItemRegisterCount').getValue());
+                                     Ext.getCmp('AccEmail').getValue(), Ext.getCmp('AccAlertEmail').getValue(), Ext.getCmp('AccVersion').getValue(), GetCurrentUserName(), Ext.getCmp('AccStatus').getValue(), Ext.getCmp('AccItemRegisterCount').getValue());
 
                                                              Ext.getCmp('LoginAccNo').setValue(chkvalue);
                                                              Ext.Viewport.unmask();
@@ -626,6 +687,7 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                 xtype: 'textfield',
                 id: 'LoginID',
                 label: 'ID',
+                hidden:true,
                 //placeHolder: 'Tom Roy',
                 disabled: true,
                 autoCapitalize: true,
@@ -750,13 +812,7 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                                            //   UserAccpwdConfirm.show();
 
 
-
-                                           if (!this.overlay) {
-                                               this.overlay = Ext.Viewport.add(UserAccpwdConfirm
-                                           );
-
-                                           }
-                                           this.overlay.show();
+                                           UserAccpwdConfirmShow();
                                            Ext.getCmp('UserAccpwdConfirmtxt').setValue("");
                                            //  pwdsts = '1';
                                            //Ext.getCmp('btnshowpwd').setHidden(true);
@@ -774,6 +830,7 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                                      id: 'btnhidepwd',
                                      // hasDisabled: false,
                                      handler: function (btn) {
+                                         UserAccpwdConfirmHide();
                                          pwdsts = '0';
                                          Ext.getCmp('btnshowpwd').setHidden(false);
                                          Ext.getCmp('btnhidepwd').setHidden(true);
@@ -809,7 +866,9 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
 
                        activate: function () {
                          
-                           
+                           if (_IsSuccessLogin)
+                           {
+                               tabActive = 'TrackingItems';
                            Ext.getStore('TrackingItemList').getProxy().setExtraParams({
                                AccNo: AAccountNo,
                            });
@@ -823,7 +882,7 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                                    Ext.StoreMgr.get('TrackingItemList').load();
                            }, 500);
 
-
+                           }
 
                        }
 
@@ -833,17 +892,19 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                },
                   {
 
-                      title: 'Responder Alert',
+                      title: 'Responder<br>Alert',
                       //xtype: 'TrackieItemed'
                       xtype: 'ResponderAlertList',
                       //  hidden: true,
                       listeners: {
 
                           activate: function () {
+
                               Ext.getCmp('useraccStartlivetracking').setHidden(true);
                               Ext.getCmp('ViewlastLocuseracc').setHidden(true);
                               Ext.getCmp('Backuseracc').setHidden(true);
-
+                              if (_IsSuccessLogin)
+                                  tabActive = 'ResponderAlert';
                               Ext.getStore('ResponderAlertGetByAcc').getProxy().setExtraParams({
                                   // AccNo: Ext.getCmp('AccNo').getValue(),
                                   AccNo: AAccountNo,
@@ -890,7 +951,7 @@ Ext.define('MyGPS.view.MyAccount.UserAcc', {
                                      listeners: {
 
                                          activate: function () {
-                                        
+                                             if (_IsSuccessLogin)
                                              try {
                                                  Ext.getStore('TrackingItemCheckIDstore').getProxy().setExtraParams({
                                                      TrackID: Ext.getCmp('TrackIDDetails').getValue(),
@@ -1454,4 +1515,251 @@ function loadedProfileEdit(evt) {
     alert("File Loaded Successfully" + fileString);
     var fileString = evt.target.result;
     $("#opProfileAdd").text(fileString);
+}
+
+
+function SetMyAccountDetailsByAccountNo()
+{
+   
+    Ext.Viewport.mask({ xtype: 'loadmask', message: 'Load Data....' });
+    var task = Ext.create('Ext.util.DelayedTask', function () {
+        _DataStore_RegisteredAccount_LoadByAccountNo.getProxy().setExtraParams({
+            AccountNo: GetCurrentUserAccountNo(),
+            
+        });
+        _DataStore_RegisteredAccount_LoadByAccountNo.load({
+
+            callback: function (record, operation, success) {
+
+
+                if (success) {
+                    var store = _DataStore_RegisteredAccount_LoadByAccountNo.getAt(0);
+
+
+                    if (store != null) {
+                        Ext.getCmp('AccID').setValue(store.get('AccID'));
+                        Ext.getCmp('AccNo').setValue(store.get('AccountNo'));
+                        Ext.getCmp('AccName').setValue(store.get('AccountName'));
+                        Ext.getCmp('AccAddress').setValue(store.get('AAddress'));
+                        Ext.getCmp('AccMobilePhone').setValue(store.get('AMobilePhone'));
+                        Ext.getCmp('AccHousePhone').setValue(store.get('AHousePhone'));
+                        Ext.getCmp('AccOfficePhone').setValue(store.get('AOfficePhone'));
+                        Ext.getCmp('AccAlertPhone').setValue(store.get('AAlertPhone'));
+                        Ext.getCmp('AccEmail').setValue(store.get('AEmail'));
+                        Ext.getCmp('AccAlertEmail').setValue(store.get('AAlertEmail'));
+                        Ext.getCmp('AccVersion').setValue(store.get('AVersion'));
+                        Ext.getCmp('AccRegisteredDate').setValue(store.get('ARegisteredDate'));
+                        Ext.getCmp('AccExpiredDate').setValue(store.get('AExpiredDate'));
+                        Ext.getCmp('AccCreatedBy').setValue(store.get('ACreatedBy'));
+                        Ext.getCmp('AccCreatedDate').setValue(store.get('ACreatedDate'));
+                        Ext.getCmp('AccModifiedBy').setValue(store.get('AModifiedBy'));
+                        Ext.getCmp('AccModifiedDate').setValue(store.get('AModifiedDate'));
+                        Ext.getCmp('AccStatus').setValue(store.get('AStatus'));
+                        Ext.getCmp('AccItemRegisterCount').setValue(store.get('AItemRegisterCount'));
+
+
+                        Ext.getCmp('LoginID').setValue(GetCurrentUserID());
+                        Ext.getCmp('LoginAccNo').setValue(GetCurrentUserAccountNo());
+                        Ext.getCmp('LoginUserName').setValue(GetCurrentUserName());
+                        Ext.getCmp('LoginPassword').setValue(Ext.getCmp('loginpasswordTextField').getValue());
+
+
+                    }
+                }
+                else {
+
+                    Ext.Msg.alert("Failed.!");
+                }
+
+
+
+            }
+        })
+
+        Ext.Viewport.setMasked(false);
+    });
+    task.delay(1000);
+
+
+
+
+
+
+
+
+
+}
+
+
+var _userAccpwdConfirm;
+function UserAccpwdConfirm()
+{
+
+
+    _userAccpwdConfirm = Ext.create('Ext.Panel', {
+        draggable: false,
+        centered: true,
+        scrollable: false,
+        height: 150,
+        width: 280,
+        // flex: 1,
+        //width: '50%',
+        //height: '50%',
+        modal: true,
+     //   hideOnMaskTap: true,
+        showAnimation: {
+            type: 'popIn',
+            duration: 250,
+            easing: 'ease-out'
+        },
+        hideAnimation: {
+            type: 'popOut',
+            duration: 250,
+            easing: 'ease-out'
+        },
+
+        items: [
+
+             {
+
+                 xtype: 'toolbar',
+                 title: 'Re-Confirm Password',
+                 docked: 'top',
+
+             },
+
+
+
+             {
+
+                 xtype: 'container',
+                 items:[
+                       {
+                           // xtype: 'textfield',
+                           xtype: 'passwordfield',
+                           id: 'UserAccpwdConfirmtxt',
+                           label: 'Password',
+                           labelWrap:true,
+                           //placeHolder: 'Tom Roy',
+                           autoCapitalize: true,
+                           //required: true,
+                           clearIcon: true
+                       },
+
+                 ]
+             },
+
+
+
+
+
+
+
+             
+            //{
+
+            //    xtype: 'passwordfield',
+            //    name: 'IDtxt',
+            //    //  label: 'ID',
+            //    id: 'UserAccpwdConfirmtxt',
+            //    placeHolder: 'Please Re-insert Password',
+            //    autoCapitalize: true,
+            //    //required: true,
+            //    clearIcon: true
+
+
+            //},
+                  {
+
+                      xtype: 'toolbar',
+                      docked: 'bottom',
+
+                      items: [
+                           {
+                               //docked: 'right',
+                               // width: 50,
+                               ui: 'round',
+                               xtype: 'button',
+                               id: 'UserAccpwdConfirmCancel',
+                               text: 'Cancel',
+                               handler: function () {
+                                   UserAccpwdConfirmHide();
+                               }
+                           },
+
+                           {
+                               xtype: 'spacer',
+                           },
+
+                           {
+                               //docked: 'right',
+                               // width: 50,
+                               ui: 'round',
+                               xtype: 'button',
+                               id: 'UserAccpwdConfirmOK',
+                               text: 'Check',
+                               handler: function () {
+
+
+                                   var strconfirmpwd = Ext.getCmp('UserAccpwdConfirmtxt').getValue();
+                                   if (strconfirmpwd === "") {
+                                       pwdsts = '0';
+                                       Ext.Msg.alert("cannot Empty!!");
+
+                                       return;
+                                   }
+                                   if (strconfirmpwd != GetCurrentUserPd()) {
+                                       pwdsts = '0';
+                                       Ext.Msg.alert("Not match.!!");
+
+                                       return;
+                                   }
+                                   if (strconfirmpwd == GetCurrentUserPd()) {
+                                       pwdsts = '1';
+                                       Ext.getCmp('btnshowpwd').setHidden(true);
+                                       Ext.getCmp('btnhidepwd').setHidden(false);
+                                       Ext.getCmp('LoginPasswordtxt').setValue(GetCurrentUserPd());
+                                       Ext.getCmp('LoginPasswordtxt').setHidden(false);
+                                       Ext.getCmp('LoginPassword').setHidden(true);
+                                       UserAccpwdConfirmHide();
+                                       //  Ext.Msg.alert("Success..!!");
+                                       return;
+                                   }
+
+
+
+
+                               }
+                           },
+
+
+                      ]
+
+                  },
+
+
+
+        ],
+
+
+    });
+    return _userAccpwdConfirm;
+}
+
+
+
+
+
+
+
+function UserAccpwdConfirmShow()
+{
+    Ext.Viewport.remove(_userAccpwdConfirm);
+    this.overlay = Ext.Viewport.add(UserAccpwdConfirm());
+    this.overlay.show();
+}
+
+
+function UserAccpwdConfirmHide() {
+    _userAccpwdConfirm.hide();
 }

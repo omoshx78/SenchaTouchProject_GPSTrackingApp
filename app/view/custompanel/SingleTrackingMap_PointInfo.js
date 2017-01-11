@@ -1,4 +1,5 @@
 ﻿var _singleTrackingMap_PointInfo;
+
 Ext.define('MyGPS.view.custompanel.SingleTrackingMap_PointInfo', {
 
 });
@@ -109,7 +110,13 @@ function SingleTrackingMapPointIfo()
                                                   html: '<div ><img src="resources/icons/PointInfo_TrackingHistory.png" width="105" height="40" alt="Company Name"></div>',
                                                   //text: '<font size="1">Playbacked</font>',
                                                   handler: function () {
-                                                      alert('test');
+                                                      _trackingHistoryCreteriaSource = 'PointInfo';
+                                                      Ext.getCmp('selectfieldTrackingHistoryCreateriaID').setStore('');
+                                                      Ext.getCmp('selectfieldTrackingHistoryCreateriaID').setOptions(
+[{ text: 'WTP2681', value: 'first' },
+  
+]);
+                                                      Ext.getCmp('mainView').setActiveItem(5);
                                                   }
                                               },
                                               {

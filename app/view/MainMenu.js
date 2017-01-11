@@ -167,6 +167,7 @@
 
                           ui: 'plain',
                           handler: function () {
+                              SetMyAccountDetailsByAccountNo();
                               Ext.getCmp('mainView').setActiveItem(3);
                           }
                       },
@@ -200,6 +201,7 @@
 
                 ui: 'plain',
                 handler: function () {
+                    _trackingHistoryCreteriaSource = 'MainMenu';
                     Ext.getCmp('mainView').setActiveItem(5);
 
 

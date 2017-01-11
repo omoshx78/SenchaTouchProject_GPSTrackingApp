@@ -256,6 +256,7 @@
     <Content Include="app\model\multipletrackingsignal.js" />
     <Content Include="app\model\Place.js" />
     <Content Include="app\model\RegisterAccountModel.js" />
+    <Content Include="app\model\RegisteredAccount\RegisteredAccountModel.js" />
     <Content Include="app\model\ResponderAlertModel.js" />
     <Content Include="app\model\ResponderAlert\ResponderAlertModel.js" />
     <Content Include="app\model\searchresultmodel.js" />
@@ -298,6 +299,7 @@
     <Content Include="app\store\Places.js" />
     <Content Include="app\store\RegisterAccountLatestIDstore.js" />
     <Content Include="app\store\RegisterAccountStore.js" />
+    <Content Include="app\store\RegisteredAccount\RegisteredAccountStore.js" />
     <Content Include="app\store\ResponderAlertGetByAcc.js" />
     <Content Include="app\store\ResponderAlertGetByID.js" />
     <Content Include="app\store\ResponderAlert\ResponderAlertStore.js" />
