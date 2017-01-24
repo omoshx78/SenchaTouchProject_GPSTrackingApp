@@ -1,6 +1,6 @@
 ﻿
 
-
+var _beenPlayed = 'no';
 var _trackingHistoryMapInfoPanel;
 Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMapInfoPanel', {
 
@@ -105,6 +105,7 @@ function TrackingHistoryMapInfoPanel()
                         //TrackingHistoryMapPlayTrackedPanelShow();
                         //TrackingHistoryMapTravelRangePanelShow();
                         btnplay = btn;
+                        _beenPlayed = 'Yes';
                         //  btn.setHtml('<div ><img src="resources/icons/pausehistory.png" width="40" height="40" alt="Company Name"></div>');
 
                         console.log(firstime);
@@ -228,9 +229,14 @@ function SetTrackingHistoryMapInfoPanelDetailsPlay(travelKM)
 
 function StopPlayMarker()
 {
-    firstime = '1';
-    resumeCounter = 0;
-    counter = 0;
-    btnplay.setHtml('<div ><img src="resources/icons/playhistory.png" width="40" height="40" alt="Company Name"></div>');
-    clearTimeout(myVar);
+
+    if (_beenPlayed == 'Yes')
+    {
+        firstime = '1';
+        resumeCounter = 0;
+        counter = 0;
+        btnplay.setHtml('<div ><img src="resources/icons/playhistory.png" width="40" height="40" alt="Company Name"></div>');
+        clearTimeout(myVar);
+    }
+  
 }

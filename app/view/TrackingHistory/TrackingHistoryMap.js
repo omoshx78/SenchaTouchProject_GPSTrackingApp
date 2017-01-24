@@ -181,8 +181,9 @@ Ext.define('MyGPS.view.TrackingHistory.TrackingHistoryMap', {
                        xtype: 'button',
                        ui: 'action',
                        id: 'backButtonHistoryMap',
-                       text: 'Back',
+                       text: 'Backed',
                        handler: function () {
+                         
                            SetTrackingHistoryMapInfoPanelHide();
                            TrackingHistoryMapPlayTrackedPanelHide();
                            TrackingHistoryMapTravelRangePanelHide();
@@ -302,6 +303,7 @@ function plotingHistoryXypath() {
        
         if (co > 1) {
             pointCount = co;
+            isrecenter = '1';
             _trackingHistoryMapConfig_pointCount = co;
          //   var modelRecordHHH = myStoreHH.getAt(0);
          
@@ -319,7 +321,7 @@ function plotingHistoryXypath() {
 
             }
            
-            isrecenter = '1';
+        
 
 
 
@@ -959,15 +961,7 @@ function removeLine() {
 function resetMap() {
 
     var bound;
-
-    if (markersArray) {
-        for (i in markersArray) {
-            markersArray[i].setMap(null);
-        }
-        markersArray.length = 0;
-    }
-
-
+   
 
     if (markersStartPointArray) {
         for (i in markersStartPointArray) {
@@ -984,7 +978,7 @@ function resetMap() {
         markersLastPointArray.length = 0;
     }
 
-   
+
 
 
 
@@ -1000,6 +994,16 @@ function resetMap() {
         }
         lineXYpath.length = 0;
     }
+
+
+    if (markersArray) {
+        for (i in markersArray) {
+            markersArray[i].setMap(null);
+        }
+        markersArray.length = 0;
+    }
+
+  
 
 
 
